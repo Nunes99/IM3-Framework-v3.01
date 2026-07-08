@@ -1,0 +1,34 @@
+<!--
+  IM³ Framework — React UI Shell v7.5
+  Tilda-safe static frontend. Calculations remain in Google Sheets + Apps Script.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+
+<div id="im3-react-root">
+  <div class="im3rx-loading">
+    <div></div>
+    <strong>Loading IM³ React interface…</strong>
+  </div>
+</div>
+
+<noscript>
+  <div class="im3rx-setup-error">
+    <h2>JavaScript is required</h2>
+    <p>The IM³ Framework interface needs JavaScript to communicate with Apps Script and Google Sheets.</p>
+  </div>
+</noscript>
+
+<script>
+  // Prevents the legacy DOM-based Tilda interface from auto-initializing.
+  // The React shell will use the same API service functions exposed by app.js.
+  window.IM3_USE_REACT_SHELL = true;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="./app.js"></script>
+<script type="text/babel" src="./im3-react.jsx"></script>
