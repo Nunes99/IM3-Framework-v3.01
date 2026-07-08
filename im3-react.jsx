@@ -93,7 +93,7 @@ function statusTone(value) {
   return "neutral";
 }
 
-function App() {
+function AppLegacy() {
   const [activePage, setActivePage] = useState("overview");
   const [loading, setLoading] = useState(true);
   const [setupError, setSetupError] = useState("");
@@ -232,7 +232,7 @@ function App() {
   );
 }
 
-function AppShell({ activePage, setActivePage, theme, setTheme, metadata, selectedProject, onRefresh, children }) {
+function AppShellLegacy({ activePage, setActivePage, theme, setTheme, metadata, selectedProject, onRefresh, children }) {
   return (
     <div className="im3rx-shell">
       <aside className="im3rx-sidebar">
@@ -271,7 +271,7 @@ function AppShell({ activePage, setActivePage, theme, setTheme, metadata, select
   );
 }
 
-function Header({ activePage, projects, selectedProjectId, setSelectedProjectId, scenarios, selectedScenarioId, setSelectedScenarioId, dashboard, onRefresh }) {
+function HeaderLegacy({ activePage, projects, selectedProjectId, setSelectedProjectId, scenarios, selectedScenarioId, setSelectedScenarioId, dashboard, onRefresh }) {
   const title = IM3_NAV.find(n => n.id === activePage)?.label || "Overview";
   const lastUpdate = dashboard?.first?.Last_Update || dashboard?.rows?.[0]?.Last_Update || "Live model";
   return (
@@ -296,7 +296,7 @@ function Header({ activePage, projects, selectedProjectId, setSelectedProjectId,
   );
 }
 
-function OverviewPage({ dashboard, summary, summaryViews, summaryView, setSummaryView, diagnostics, onDiagnostics }) {
+function OverviewPageLegacy({ dashboard, summary, summaryViews, summaryView, setSummaryView, diagnostics, onDiagnostics }) {
   const dashSummary = dashboard?.summary || {};
   const first = dashboard?.first || dashboard?.rows?.[0] || {};
   const decision = first.Final_Decision || first.Decision_Label || first.Recommendation || "Review";
@@ -320,7 +320,7 @@ function OverviewPage({ dashboard, summary, summaryViews, summaryView, setSummar
   );
 }
 
-function KpiCard({ label, value, hint, tone = "neutral" }) {
+function KpiCardLegacy({ label, value, hint, tone = "neutral" }) {
   return (
     <article className={`im3rx-kpi ${tone}`}>
       <span>{label}</span>
@@ -330,7 +330,7 @@ function KpiCard({ label, value, hint, tone = "neutral" }) {
   );
 }
 
-function DataQualityPanel({ diagnostics, dashboard, onDiagnostics }) {
+function DataQualityPanelLegacy({ diagnostics, dashboard, onDiagnostics }) {
   const missingSheets = asArray(diagnostics?.missingSheets);
   const rows = dashboard?.rows || [];
   const hasProject = rows.length > 0;
@@ -353,7 +353,7 @@ function DataQualityPanel({ diagnostics, dashboard, onDiagnostics }) {
   );
 }
 
-function SummaryViewer({ summary, summaryViews, summaryView, setSummaryView }) {
+function SummaryViewerLegacy({ summary, summaryViews, summaryView, setSummaryView }) {
   const cards = asArray(summary?.cards);
   return (
     <section className="im3rx-card">
@@ -527,11 +527,11 @@ function TablePreview({ rows }) {
   return <div className="im3rx-table-wrap"><table><thead><tr>{headers.map(h => <th key={h}>{prettyLabel(h)}</th>)}</tr></thead><tbody>{visible.map((row, idx) => <tr key={idx}>{headers.map(h => <td key={h}>{String(row[h] ?? "—")}</td>)}</tr>)}</tbody></table></div>;
 }
 
-function AnalysisPage({ dashboard, summary, summaryViews, summaryView, setSummaryView }) {
+function AnalysisPageLegacy({ dashboard, summary, summaryViews, summaryView, setSummaryView }) {
   return <section className="im3rx-two-col"><SummaryViewer summary={summary} summaryViews={summaryViews} summaryView={summaryView} setSummaryView={setSummaryView} /><section className="im3rx-card"><div className="im3rx-card-head"><div><p>Dashboard Rows</p><h2>Filtered output</h2></div></div><TablePreview rows={dashboard?.rows || []} /></section></section>;
 }
 
-function GraphStudioPage({ metadata, projects, selectedProjectId, filters, notify }) {
+function GraphStudioPageLegacy({ metadata, projects, selectedProjectId, filters, notify }) {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
   const catalog = asArray(metadata?.chartMetricCatalog || metadata?.chartMetrics);
@@ -646,7 +646,7 @@ function GraphStudioPage({ metadata, projects, selectedProjectId, filters, notif
   );
 }
 
-function ReportsPage({ selectedProjectId, filters, notify }) {
+function ReportsPageLegacy({ selectedProjectId, filters, notify }) {
   const [language, setLanguage] = useState("en");
   const [progress, setProgress] = useState(null);
   const [links, setLinks] = useState([]);
@@ -707,12 +707,13 @@ function AdministrationPage({ metadata, diagnostics, onDiagnostics, notify }) {
   return <section className="im3rx-card"><div className="im3rx-card-head"><div><p>Administration</p><h2>System status</h2><small>API version: {metadata?.version || "—"}</small></div><div className="im3rx-actions"><button onClick={onDiagnostics}>Diagnostics</button><button onClick={clearCache}>Clear cache</button></div></div>{diagnostics ? <pre className="im3rx-json">{JSON.stringify(diagnostics, null, 2)}</pre> : <EmptyState title="Diagnostics not loaded" text="Run diagnostics to inspect sheets, modules and endpoints." />}</section>;
 }
 
-function LoadingState({ text, compact }) {
-  return <div className={compact ? "im3rx-loading compact" : "im3rx-loading"}><div></div><strong>{text}</strong></div>;
+function LoadingState({ text, compact, progress }) {
+  const pct = Math.max(0, Math.min(100, Number(progress?.pct || 0)));
+  return <div className={compact ? "im3rx-loading compact" : "im3rx-loading"}><div></div><strong>{progress?.text || text}</strong>{progress?.detail && <p>{progress.detail}</p>}{progress && <div className={`im3rx-load-meter ${progress?.error ? "error" : ""}`}><span style={{width:pct + "%"}}></span></div>}{progress && <small>{pct}%{progress?.elapsed !== undefined ? ` | elapsed ${progress.elapsed}s` : ""}{progress?.remaining ? ` | about ${progress.remaining}s left` : ""}</small>}{progress?.warning && <em>{progress.warning}</em>}</div>;
 }
 
-function SetupError({ message }) {
-  return <div className="im3rx-setup-error"><h2>IM³ setup error</h2><p>{message}</p><small>Check Apps Script deployment URL, access permissions and script loading order.</small></div>;
+function SetupError({ message, progress }) {
+  return <div className="im3rx-setup-error"><h2>IM³ setup error</h2><p>{message}</p>{progress && <div className="im3rx-progress error"><div><strong>{progress.text || "Loading failed"}</strong><span>{progress.pct || 100}%</span></div><i style={{width:(progress.pct || 100) + "%"}}></i>{progress.detail && <small>{progress.detail}</small>}</div>}<small>Check Apps Script deployment URL, access permissions and script loading order.</small></div>;
 }
 
 function EmptyState({ title, text }) {
@@ -732,8 +733,8 @@ function im3xDateTime(date){if(!date)return"Not loaded yet";return new Intl.Date
 function im3xIcon(label){const t=String(label||"").toLowerCase();if(/row|record/.test(t))return IM3_ACTION_ICONS.rows||"https://img.icons8.com/fluency-systems-regular/48/table.png";if(/npv|cash|revenue|cost|price|money/.test(t))return"https://img.icons8.com/fluency-systems-regular/48/money-bag.png";if(/irr|percent|probability|rate/.test(t))return"https://img.icons8.com/fluency-systems-regular/48/percentage.png";if(/mcda|strategic/.test(t))return"https://img.icons8.com/fluency-systems-regular/48/rating.png";if(/system|dynamic/.test(t))return"https://img.icons8.com/fluency-systems-regular/48/process.png";if(/score|rank/.test(t))return"https://img.icons8.com/fluency-systems-regular/48/leaderboard.png";if(/project/.test(t))return"https://img.icons8.com/fluency-systems-regular/48/project.png";if(/decision/.test(t))return"https://img.icons8.com/fluency-systems-regular/48/decision.png";return"https://img.icons8.com/fluency-systems-regular/48/report-card.png";}
 function im3xOptionValue(o,key){return o&&typeof o==="object"?String(o[key]??o.value??o.id??o.key??o.label??""):String(o??"");}
 function im3xOptionLabel(o,key){return im3xCleanLabel(o&&typeof o==="object"?String(o[key]??o.label??o.name??o.title??o.value??""):String(o??""));}
-function getOptionLabel(option){return im3xOptionLabel(option);}
 function im3xActivity(type,text,setLog){setLog(prev=>[{type:type||"info",text:String(text||""),time:new Date()},...prev].slice(0,40));}
+function im3xWithTimeout(promise,ms,label){let timer;return Promise.race([promise,new Promise((_,reject)=>{timer=window.setTimeout(()=>reject(new Error(label||"Request timeout")),ms)})]).finally(()=>window.clearTimeout(timer));}
 IM3_ACTION_ICONS.bell="https://img.icons8.com/fluency-systems-regular/48/appointment-reminders.png";
 IM3_ACTION_ICONS.cancel="https://img.icons8.com/fluency-systems-regular/48/cancel.png";
 IM3_ACTION_ICONS.download="https://img.icons8.com/fluency-systems-regular/48/download.png";
@@ -748,13 +749,13 @@ function App(){
  const selectedProjectId=selectedProjectIds.length===1?selectedProjectIds[0]:"";
  const filters=useMemo(()=>{const f={};if(selectedProjectIds.length)f.projectIds=selectedProjectIds;if(selectedScenarioTypes.length){f.scenarioNames=selectedScenarioTypes;f.scenarioTypes=selectedScenarioTypes;}return f;},[selectedProjectIds.join("|"),selectedScenarioTypes.join("|")]);
  useEffect(()=>{const t=window.setInterval(()=>setNow(new Date()),1000);return()=>window.clearInterval(t);},[]);
- useEffect(()=>{let mounted=true;async function boot(){try{setProgress({pct:8,text:"Connecting to Apps Script"});const api=window.IM3Api;if(!api)throw new Error("IM3 API service is not available.");setProgress({pct:28,text:"Loading metadata"});const[meta,dd,fo,lp]=await Promise.all([api.loadMetadata(),api.loadDropdowns().catch(()=>({})),api.loadFilterOptions().catch(()=>({})),api.loadProjects().catch(()=>[])]);if(!mounted)return;setMetadata(meta||{});setDropdowns(dd||meta?.dropdowns||{});setFilterOptions(fo||meta?.filters||{});const list=asArray(lp).length?lp:asArray(fo?.projectIds).map(p=>({Project_ID:getOptionValue(p),Project_Name:im3xOptionLabel(p)}));setProjects(list);setSelectedProjectIds([]);setSetupError("");im3xActivity("success","Interface loaded",setActivityLog);}catch(e){setSetupError(normalizeError(e));im3xActivity("error",normalizeError(e),setActivityLog);}finally{if(mounted){setLoading(false);window.setTimeout(()=>setProgress(null),700);}}}boot();return()=>{mounted=false};},[]);
+ useEffect(()=>{let mounted=true,timer=null,failed=false;const started=Date.now();function mark(pct,text,extra={}){if(!mounted)return;const elapsed=Math.max(0,Math.round((Date.now()-started)/1000)),remaining=pct>4&&pct<100?Math.max(1,Math.round(elapsed*(100-pct)/pct)):0;setProgress({pct,text,elapsed,remaining,...extra});}async function optional(label,fn,fallback){try{return await im3xWithTimeout(fn(),14000,label+" timeout")}catch(e){const warning=`${label} warning: ${normalizeError(e)}`;im3xActivity("warning",warning,setActivityLog);return fallback}}async function boot(){try{mark(4,"Preparing interface",{detail:"Starting React shell and checking API bridge."});const api=window.IM3Api;if(!api)throw new Error("IM3 API service is not available.");timer=window.setInterval(()=>setProgress(prev=>{if(!prev||prev.error||prev.pct>=100)return prev;const elapsed=Math.max(0,Math.round((Date.now()-started)/1000)),remaining=prev.pct>4?Math.max(1,Math.round(elapsed*(100-prev.pct)/prev.pct)):0;return{...prev,elapsed,remaining}}),1000);mark(14,"Connecting to Apps Script",{detail:"Waiting for the deployed web app response."});mark(28,"Loading metadata",{detail:"Reading modules, result views and chart catalog."});const meta=await im3xWithTimeout(api.loadMetadata(),70000,"Metadata request timeout");mark(54,"Loading supporting lists",{detail:"Dropdowns, filters and projects are loading in parallel."});const[dd,fo,lp]=await Promise.all([optional("Dropdown lists",()=>api.loadDropdowns(),{}),optional("Filter options",()=>api.loadFilterOptions(),{}),optional("Projects",()=>api.loadProjects(),[])]);if(!mounted)return;mark(90,"Preparing dashboard",{detail:"Normalizing projects, scenarios and UI filters."});setMetadata(meta||{});setDropdowns(dd||meta?.dropdowns||{});setFilterOptions(fo||meta?.filters||{});const list=asArray(lp).length?lp:asArray(fo?.projectIds).map(p=>({Project_ID:getOptionValue(p),Project_Name:im3xOptionLabel(p)}));setProjects(list);setSelectedProjectIds([]);setSetupError("");mark(100,"Interface ready",{detail:"Base data loaded. Opening the selected dashboard view.",remaining:0});im3xActivity("success","Interface loaded",setActivityLog)}catch(e){failed=true;const message=normalizeError(e);setSetupError(message);mark(100,"Loading failed",{detail:message,error:true,remaining:0});im3xActivity("error",message,setActivityLog)}finally{if(timer)window.clearInterval(timer);if(mounted){setLoading(false);if(!failed)window.setTimeout(()=>setProgress(prev=>prev?.error?prev:null),900)}}}boot();return()=>{mounted=false;if(timer)window.clearInterval(timer)};},[]);
  useEffect(()=>{if(metadata)refreshOutputs("Loading selected view");},[metadata,filters,summaryView]);
  function notify(type,text){setToast({type,text});im3xActivity(type,text,setActivityLog);window.clearTimeout(window.__im3ReactToastTimer);window.__im3ReactToastTimer=window.setTimeout(()=>setToast(null),4200);}
- async function refreshOutputs(reason="Refreshing model outputs"){try{setProgress({pct:16,text:reason});im3xActivity("info",reason,setActivityLog);const dashPromise=window.IM3Api.loadDashboard(filters,selectedProjectId).catch(err=>({error:normalizeError(err),rows:[],summary:{}}));setProgress({pct:58,text:"Loading result viewer"});const sumPromise=window.IM3Api.loadSummaryData(summaryView,filters,selectedProjectId).catch(err=>({error:normalizeError(err),cards:[]}));const[dash,sum]=await Promise.all([dashPromise,sumPromise]);setDashboard(dash);setSummary(sum);setLastLoadedAt(new Date());setProgress({pct:100,text:"Data loaded"});window.setTimeout(()=>setProgress(null),700);im3xActivity("success","Dashboard and result viewer updated",setActivityLog);}catch(e){setProgress({pct:100,text:"Loading failed",error:true});notify("error",normalizeError(e));}}
+ async function refreshOutputs(reason="Refreshing model outputs"){let timer=null;const started=Date.now();function mark(pct,text,extra={}){const elapsed=Math.max(0,Math.round((Date.now()-started)/1000)),remaining=pct>4&&pct<100?Math.max(1,Math.round(elapsed*(100-pct)/pct)):0;setProgress({pct,text,elapsed,remaining,...extra})}try{mark(12,reason,{detail:"Preparing filters and requesting model outputs."});im3xActivity("info",reason,setActivityLog);timer=window.setInterval(()=>setProgress(prev=>{if(!prev||prev.error||prev.pct>=100)return prev;const elapsed=Math.max(0,Math.round((Date.now()-started)/1000)),remaining=prev.pct>4?Math.max(1,Math.round(elapsed*(100-prev.pct)/prev.pct)):0;return{...prev,elapsed,remaining}}),1000);mark(32,"Loading dashboard and result viewer",{detail:"Both endpoints are loading in parallel."});const dashPromise=im3xWithTimeout(window.IM3Api.loadDashboard(filters,selectedProjectId),22000,"Dashboard timeout").catch(err=>({error:normalizeError(err),rows:[],summary:{}}));const sumPromise=im3xWithTimeout(window.IM3Api.loadSummaryData(summaryView,filters,selectedProjectId),22000,"Result viewer timeout").catch(err=>({error:normalizeError(err),cards:[]}));const[dash,sum]=await Promise.all([dashPromise,sumPromise]);const issues=[];if(dash?.error)issues.push("Dashboard: "+dash.error);if(sum?.error)issues.push("Result viewer: "+sum.error);setDashboard(dash);setSummary(sum);setLastLoadedAt(new Date());mark(100,issues.length?"Data loaded with warnings":"Data loaded",{detail:issues.join(" | ")||"Dashboard and result viewer are ready.",warning:issues.join(" | "),remaining:0});window.setTimeout(()=>setProgress(prev=>prev?.error?prev:null),issues.length?4200:900);im3xActivity(issues.length?"warning":"success",issues.length?`Data loaded with ${issues.length} warning(s)`:"Dashboard and result viewer updated",setActivityLog)}catch(e){mark(100,"Loading failed",{detail:normalizeError(e),error:true,remaining:0});notify("error",normalizeError(e))}finally{if(timer)window.clearInterval(timer)}}
  async function refreshAll(){await refreshOutputs("Manual refresh requested");notify("success","Results updated.");}
  async function runDiagnostics(){try{setProgress({pct:20,text:"Running diagnostics"});const result=await window.IM3Api.runDiagnostics();setDiagnostics(result);setProgress({pct:100,text:"Diagnostics completed"});window.setTimeout(()=>setProgress(null),650);notify("success","Diagnostics completed.");}catch(e){setProgress({pct:100,text:"Diagnostics failed",error:true});notify("error",normalizeError(e));}}
- if(loading)return <><GlobalProgress progress={progress}/><LoadingState text="Loading IM3 model data"/></>; if(setupError)return <SetupError message={setupError}/>;
+ if(loading||setupError)return <><GlobalProgress progress={progress}/>{setupError?<SetupError message={setupError} progress={progress}/>:<LoadingState text="Loading IM3 model data" progress={progress}/>}</>;
  const selectedProject=selectedProjectIds.length===1?(projects.find(p=>String(p.Project_ID||p.value)===String(selectedProjectIds[0]))||{}):{Project_Name:selectedProjectIds.length?`${selectedProjectIds.length} projects selected`:"All projects"};
  return <div className="im3rx-app" data-theme={theme}><GlobalProgress progress={progress}/><AppShell activePage={activePage} setActivePage={setActivePage} theme={theme} setTheme={setTheme} metadata={metadata} selectedProject={selectedProject} onRefresh={refreshAll} now={now} activityLog={activityLog} activityOpen={activityOpen} setActivityOpen={setActivityOpen}><Header activePage={activePage} projects={projects} selectedProjectIds={selectedProjectIds} setSelectedProjectIds={setSelectedProjectIds} scenarioOptions={scenarioOptions} selectedScenarioTypes={selectedScenarioTypes} setSelectedScenarioTypes={setSelectedScenarioTypes} lastLoadedAt={lastLoadedAt} onRefresh={refreshAll}/>{activePage==="overview"&&<OverviewPage dashboard={dashboard} summary={summary} summaryViews={summaryViews} summaryView={summaryView} setSummaryView={setSummaryView} diagnostics={diagnostics} onDiagnostics={runDiagnostics}/>} {activePage==="input"&&<DataInputPage modules={modules} dropdowns={dropdowns} filterOptions={filterOptions} selectedProjectId={selectedProjectId} onSaved={refreshAll} notify={notify}/>} {activePage==="analysis"&&<AnalysisPage dashboard={dashboard} summary={summary} summaryViews={summaryViews} summaryView={summaryView} setSummaryView={setSummaryView}/>} {activePage==="graphs"&&<GraphStudioPage metadata={metadata} projects={projects} selectedProjectIds={selectedProjectIds} filters={filters} notify={notify} selectedReportCharts={selectedReportCharts} setSelectedReportCharts={setSelectedReportCharts}/>} {activePage==="reports"&&<ReportsPage selectedProjectId={selectedProjectId} filters={filters} notify={notify} selectedReportCharts={selectedReportCharts}/>} {activePage==="admin"&&<AdministrationPage metadata={metadata} diagnostics={diagnostics} onDiagnostics={runDiagnostics} notify={notify}/>}</AppShell><ActivityDrawer open={activityOpen} log={activityLog} onClose={()=>setActivityOpen(false)}/>{toast&&<Toast type={toast.type} text={toast.text} onClose={()=>setToast(null)}/>}</div>;
 }
@@ -773,7 +774,7 @@ function renderChart(data){if(!window.Chart||!canvasRef.current)return;if(chartR
 function download(format){if(!canvasRef.current)return;const type=format==="jpg"?"image/jpeg":"image/png",a=document.createElement("a");a.href=canvasRef.current.toDataURL(type,.92);a.download=`IM3_Graph_${slot}.${format}`;a.click()}function toggleReport(){const meta={id:chartId,slot,title:`Graph ${slot}: ${group}`,chartType,metrics:selectedMetrics,projects:selectedProjects,image:chartImage};setSelectedReportCharts(prev=>included?prev.filter(c=>c.id!==chartId):[...prev.filter(c=>c.id!==chartId),meta])}
 return <div className="im3rx-chart-workbench"><div className="im3rx-chart-title"><strong>Graph {slot}</strong><button className="primary" onClick={buildChart}><img src={IM3_ACTION_ICONS.render} alt=""/>Render</button></div><div className="im3rx-graph-grid"><label><span>Indicator group</span><select value={group} onChange={e=>setGroup(e.target.value)}>{groups.map(g=><option key={g} value={g}>{im3xCleanLabel(g)}</option>)}</select></label><label><span>Chart type</span><select value={chartType} onChange={e=>setChartType(e.target.value)}>{IM3_CHART_TYPES.map(t=><option key={t.value} value={t.value}>{t.label}</option>)}</select></label></div><div className="im3rx-picker"><strong>Compatible metrics</strong>{metricsInGroup.map(m=>{const id=m.metricId||m.value;return <button key={id} className={selectedMetrics.includes(id)?"active":""} onClick={()=>toggleMetric(id)}>{im3xCleanLabel(m.label||id)}<small>{m.fallbackUnit||m.unit||""}</small></button>})}</div><div className="im3rx-picker compact"><strong>Projects</strong>{projects.map(p=>{const id=p.Project_ID||p.value;return <button key={id} className={selectedProjects.includes(id)?"active":""} onClick={()=>toggleProject(id)}>{im3xCleanLabel(p.Project_Name||p.label||id)}</button>})}</div>{chartProgress&&<div className={`im3rx-progress im3rx-chart-progress ${chartProgress.error?"error":""}`}><div><strong>{chartProgress.text}</strong><span>{chartProgress.pct}%</span></div><i style={{width:chartProgress.pct+"%"}}></i><small>Graph Studio rendering progress</small></div>}{status&&<div className="im3rx-validation"><strong>Status</strong><span>{status}</span></div>}<div className="im3rx-chart-box"><canvas ref={canvasRef}></canvas></div><div className="im3rx-actions bottom"><button onClick={()=>download("png")} disabled={!chartImage}><img src={IM3_ACTION_ICONS.download} alt=""/>PNG</button><button onClick={()=>download("jpg")} disabled={!chartImage}><img src={IM3_ACTION_ICONS.image} alt=""/>JPG</button><button className={included?"primary":""} onClick={toggleReport} disabled={!chartImage}><img src={IM3_ACTION_ICONS.report} alt=""/>{included?"Included":"Include in PDF"}</button></div></div>}
 function ReportsPage({selectedProjectId,filters,notify,selectedReportCharts}){const[language,setLanguage]=useState("en"),[orientation,setOrientation]=useState("landscape"),[paperSize,setPaperSize]=useState("A4"),[includeCharts,setIncludeCharts]=useState(true),[progress,setProgress]=useState(null),[links,setLinks]=useState([]),[generating,setGenerating]=useState(false),cancelRef=useRef({canceled:false,token:0});async function generate(kind){let timer;const token=Date.now();cancelRef.current={canceled:false,token};try{setLinks([]);setGenerating(true);const start=Date.now();setProgress({pct:10,text:"Preparing report request",elapsed:0,estimate:kind==="pack"?120:60});timer=window.setInterval(()=>{setProgress(prev=>prev&&!cancelRef.current.canceled?{...prev,pct:Math.min(prev.pct+7,88),elapsed:Math.round((Date.now()-start)/1000)}:prev)},1000);const options={orientation,paperSize,includeCharts,charts:includeCharts?selectedReportCharts.map(c=>({title:c.title,chartType:c.chartType,metrics:c.metrics,projects:c.projects})):[]};const result=kind==="pack"?await window.IM3Api.generateInvestmentPack(selectedProjectId,language,filters,options):await window.IM3Api.generatePdf(kind,selectedProjectId,language,filters,options);window.clearInterval(timer);if(cancelRef.current.canceled||cancelRef.current.token!==token)return;setProgress({pct:100,text:"Report generated successfully.",elapsed:Math.round((Date.now()-start)/1000),estimate:0});setLinks(extractReportLinks(result));notify("success","Report generated successfully.")}catch(e){window.clearInterval(timer);if(!cancelRef.current.canceled){setProgress({pct:100,text:"Report generation failed: "+normalizeError(e),elapsed:0,estimate:0,error:true});notify("error",normalizeError(e))}}finally{setGenerating(false)}}function cancel(){cancelRef.current.canceled=true;setGenerating(false);setProgress({pct:100,text:"Report generation canceled in the interface.",elapsed:0,error:true});notify("info","Report generation canceled in the interface.")}function clear(){setLinks([]);setProgress(null)}return <section className="im3rx-card"><div className="im3rx-card-head"><div><p>Reports</p><h2>Investment Decision Pack</h2><small>Preview settings, choose page layout, include selected charts, then generate manually.</small></div><select value={language} onChange={e=>setLanguage(e.target.value)}>{IM3_LANGUAGES.map(l=><option key={l.value} value={l.value}>{l.label}</option>)}</select></div><div className="im3rx-report-layout"><div className="im3rx-report-options"><label><span>Page orientation</span><select value={orientation} onChange={e=>setOrientation(e.target.value)}><option value="landscape">Horizontal / landscape</option><option value="portrait">Vertical / portrait</option></select></label><label><span>Paper size</span><select value={paperSize} onChange={e=>setPaperSize(e.target.value)}><option value="A4">A4</option><option value="Letter">Letter</option></select></label><label className="im3rx-toggle"><input type="checkbox" checked={includeCharts} onChange={e=>setIncludeCharts(e.target.checked)}/><span>Include selected charts ({selectedReportCharts.length})</span></label></div><div className="im3rx-report-preview"><div><img src="https://img.icons8.com/fluency-systems-regular/48/visible.png" alt=""/><strong>Preview before generation</strong></div><p>Language: {language.toUpperCase()} | Layout: {orientation} | Paper: {paperSize}</p><p>Charts selected: {includeCharts?selectedReportCharts.length:0}</p><ul>{selectedReportCharts.slice(0,4).map(c=><li key={c.id}>{c.title}</li>)}</ul></div></div><div className="im3rx-actions bottom"><button onClick={()=>generate("executive")} disabled={generating}>Executive Summary</button><button onClick={()=>generate("technical")} disabled={generating}>Technical Investment Report</button><button className="primary" onClick={()=>generate("pack")} disabled={generating}>Investment Decision Pack</button>{generating&&<button className="danger" onClick={cancel}><img src={IM3_ACTION_ICONS.cancel} alt=""/>Cancel</button>}<button onClick={clear} disabled={generating}>Clear reports</button></div>{progress&&<div className={`im3rx-progress ${progress.error?"error":""}`}><div><strong>{progress.text}</strong><span>{progress.pct}%</span></div><i style={{width:progress.pct+"%"}}></i><small>Elapsed: {progress.elapsed||0}s {progress.estimate?`| Estimated: ${progress.estimate}s`:""}</small></div>}<div className="im3rx-links">{links.map((link,idx)=><a key={idx} href={link.url} target="_blank" rel="noreferrer">{link.label}</a>)}</div></section>}
-function GlobalProgress({progress}){if(!progress)return null;return <div className={`im3rx-global-progress ${progress.error?"error":""}`}><div><strong>{progress.text}</strong><span>{progress.pct}%</span></div><i style={{width:progress.pct+"%"}}></i></div>}
+function GlobalProgress({progress}){if(!progress)return null;return <div className={`im3rx-global-progress ${progress.error?"error":""}`}><div><strong>{progress.text}</strong><span>{progress.pct}%</span></div><i style={{width:progress.pct+"%"}}></i><small>{progress.detail||progress.warning||""}{progress.elapsed!==undefined?` | elapsed ${progress.elapsed}s`:""}{progress.remaining?` | about ${progress.remaining}s left`:""}</small></div>}
 function ActivityDrawer({open,log,onClose}){return <aside className={`im3rx-activity ${open?"open":""}`}><div><strong>Execution history</strong><button onClick={onClose}>x</button></div>{!log.length?<p>No activity yet.</p>:log.map((item,idx)=><article key={idx} className={item.type}><span>{im3xDateTime(item.time)}</span><strong>{item.text}</strong></article>)}</aside>}
 
 

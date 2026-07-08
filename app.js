@@ -1438,25 +1438,30 @@ async function im3GenerateInvestmentPack() {
 }
 function im3ToggleTheme() { const app=document.getElementById("im3-app"); const isNight=app.getAttribute("data-theme")==="night"; app.setAttribute("data-theme", isNight?"day":"night"); document.getElementById("im3ThemeText").textContent=isNight?"Night mode":"Day mode"; document.getElementById("im3ThemeIcon").src=isNight?"https://img.icons8.com/fluency-systems-regular/48/moon-symbol.png":"https://img.icons8.com/fluency-systems-regular/48/sun.png"; }
 
-document.getElementById("im3RefreshBtn").addEventListener("click",()=>im3LoadModule(im3State.currentModule.id,document.getElementById("im3RowSelect").value));
-document.getElementById("im3SaveBtn").addEventListener("click",()=>im3SaveCurrent());
-document.getElementById("im3NextBtn").addEventListener("click",async()=>{const ok=await im3SaveCurrent(); if(ok) im3LoadModuleByIndex(im3State.moduleIndex+1);});
-document.getElementById("im3BackBtn").addEventListener("click",()=>im3LoadModuleByIndex(im3State.moduleIndex-1));
-document.getElementById("im3PdfBtn").addEventListener("click",im3GeneratePdf);
+function im3BindLegacyControl(id, eventName, handler) {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener(eventName, handler);
+}
+
+im3BindLegacyControl("im3RefreshBtn", "click", () => im3LoadModule(im3State.currentModule.id, document.getElementById("im3RowSelect").value));
+im3BindLegacyControl("im3SaveBtn", "click", () => im3SaveCurrent());
+im3BindLegacyControl("im3NextBtn", "click", async () => { const ok = await im3SaveCurrent(); if (ok) im3LoadModuleByIndex(im3State.moduleIndex + 1); });
+im3BindLegacyControl("im3BackBtn", "click", () => im3LoadModuleByIndex(im3State.moduleIndex - 1));
+im3BindLegacyControl("im3PdfBtn", "click", im3GeneratePdf);
 const im3DetailedBtn = document.getElementById("im3DetailedReportBtn");
 if (im3DetailedBtn) im3DetailedBtn.addEventListener("click", im3GenerateDetailedReport);
 const im3InvestmentPackBtn = document.getElementById("im3InvestmentPackBtn");
 if (im3InvestmentPackBtn) im3InvestmentPackBtn.addEventListener("click", im3GenerateInvestmentPack);
 const im3ClearReportsBtn = document.getElementById("im3ClearReportsBtn");
 if (im3ClearReportsBtn) im3ClearReportsBtn.addEventListener("click", im3ClearGeneratedReports);
-document.getElementById("im3ApplyFiltersBtn").addEventListener("click",im3ApplyFilters);
-document.getElementById("im3ClearFiltersBtn").addEventListener("click",im3ClearFilters);
-document.getElementById("im3RepairBtn").addEventListener("click",im3RepairFormulas);
-document.getElementById("im3BuildChartBtn").addEventListener("click",im3BuildChart);
-document.getElementById("chartTemplate").addEventListener("change", e => im3ApplyGraphTemplate(e.target.value));
-document.getElementById("im3ClearChartBtn").addEventListener("click", im3ClearActiveChart);
-document.getElementById("im3SummaryRefreshBtn").addEventListener("click", im3LoadSelectedSummary);
-document.getElementById("im3ThemeToggle").addEventListener("click",im3ToggleTheme);
+im3BindLegacyControl("im3ApplyFiltersBtn", "click", im3ApplyFilters);
+im3BindLegacyControl("im3ClearFiltersBtn", "click", im3ClearFilters);
+im3BindLegacyControl("im3RepairBtn", "click", im3RepairFormulas);
+im3BindLegacyControl("im3BuildChartBtn", "click", im3BuildChart);
+im3BindLegacyControl("chartTemplate", "change", e => im3ApplyGraphTemplate(e.target.value));
+im3BindLegacyControl("im3ClearChartBtn", "click", im3ClearActiveChart);
+im3BindLegacyControl("im3SummaryRefreshBtn", "click", im3LoadSelectedSummary);
+im3BindLegacyControl("im3ThemeToggle", "click", im3ToggleTheme);
 
 
 /* ===== v2.5 project-level dashboard cards override ===== */
