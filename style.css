@@ -2493,3 +2493,113 @@ html:has(#im3-app), body:has(#im3-app){
     width:min(1500px, calc(100vw - 48px));
   }
 }
+
+/* ============================================================
+   IM3 loading diagnostics v9.2
+   ============================================================ */
+.im3rx-loading{
+  gap:10px;
+}
+
+.im3rx-loading p{
+  width:100%;
+  max-width:340px;
+  margin:0 auto;
+  color:var(--im3rx-muted);
+  font-size:13px;
+  line-height:1.45;
+}
+
+.im3rx-loading small{
+  color:var(--im3rx-muted);
+  font-size:12px;
+  line-height:1.35;
+}
+
+.im3rx-loading em{
+  display:block;
+  width:100%;
+  max-width:340px;
+  margin:0 auto;
+  padding:8px 10px;
+  border:1px solid color-mix(in srgb, var(--im3rx-warning), transparent 52%);
+  border-radius:6px;
+  background:color-mix(in srgb, var(--im3rx-warning), transparent 90%);
+  color:var(--im3rx-text);
+  font-size:12px;
+  font-style:normal;
+  line-height:1.35;
+}
+
+.im3rx-load-meter{
+  width:100%;
+  max-width:320px;
+  height:8px;
+  margin:0 auto;
+  overflow:hidden;
+  border-radius:999px;
+  background:var(--im3rx-surface-2);
+  border:1px solid var(--im3rx-border);
+  border-top-color:var(--im3rx-border);
+  animation:none;
+}
+
+.im3rx-load-meter span{
+  display:block;
+  height:100%;
+  min-width:8px;
+  border-radius:inherit;
+  background:linear-gradient(90deg,var(--im3rx-secondary),var(--im3rx-accent));
+  transition:width .28s ease;
+}
+
+.im3rx-load-meter.error span{
+  background:var(--im3rx-danger);
+}
+
+.im3rx-global-progress small{
+  display:block;
+  min-height:16px;
+  margin-top:6px;
+  color:var(--im3rx-muted);
+  font-size:12px;
+  line-height:1.35;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-loading em{
+  background:#322616;
+  border-color:#76551D;
+  color:#F9DA7B;
+}
+
+/* ============================================================
+   IM3 loading meter fix v9.3
+   Keeps one spinner only; the progress indicator stays a bar.
+   ============================================================ */
+.im3rx-loading .im3rx-load-meter{
+  display:block!important;
+  place-items:initial!important;
+  width:min(320px, 100%)!important;
+  max-width:320px!important;
+  height:8px!important;
+  min-height:0!important;
+  margin:2px auto 0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border:1px solid var(--im3rx-border)!important;
+  border-top-color:var(--im3rx-border)!important;
+  border-radius:999px!important;
+  background:var(--im3rx-surface-2)!important;
+  animation:none!important;
+  box-shadow:none!important;
+}
+
+.im3rx-loading .im3rx-load-meter span{
+  display:block!important;
+  height:100%!important;
+  min-width:8px;
+  border:0!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,var(--im3rx-secondary),var(--im3rx-accent));
+  animation:none!important;
+}
