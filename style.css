@@ -2931,3 +2931,27 @@ html:has(#im3-app), body:has(#im3-app){
     grid-template-columns:1fr;
   }
 }
+
+/* Report branding controls v9.6 */
+.im3rx-report-options input{
+  min-height:42px;
+  border:1px solid var(--im3rx-border);
+  border-radius:6px;
+  background:var(--im3rx-surface);
+  color:var(--im3rx-text);
+  padding:0 12px;
+  font-family:inherit;
+  outline:none;
+  width:100%;
+}
+
+.im3rx-report-options input:focus{
+  border-color:var(--im3rx-secondary);
+  box-shadow:0 0 0 3px rgba(31,120,180,.15);
+}
+
+.im3rx-app[data-theme="night"] .im3rx-report-options input{
+  background:#111D2B;
+  border-color:#31445B;
+  color:#F8FBFF;
+}
