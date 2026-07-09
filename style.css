@@ -3924,3 +3924,608 @@ body {
     padding:24px 18px!important;
   }
 }
+
+
+/* ============================================================
+   IM³ tablet/iPad/Apple responsive polish v12.0
+   - iPad portrait + landscape breakpoints
+   - uniform Apple-safe fields/buttons
+   - centered icon + text buttons across the platform
+   - initial loading card remains centered; global progress remains post-boot only
+   ============================================================ */
+:root{
+  --im3rx-control-h:46px;
+  --im3rx-control-radius:8px;
+  --im3rx-control-gap:8px;
+  --im3rx-page-pad:clamp(14px, 1.65vw, 26px);
+}
+
+html,
+body{
+  width:100%;
+  min-width:320px;
+  min-height:100%;
+  margin:0;
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  overscroll-behavior-y:none;
+}
+
+@supports (-webkit-touch-callout:none){
+  html,
+  body{
+    min-height:-webkit-fill-available;
+  }
+}
+
+#im3-react-root{
+  width:100vw!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  height:100svh!important;
+  min-height:100svh!important;
+  padding:0!important;
+  margin:0!important;
+  display:grid!important;
+  place-items:center!important;
+  overflow:hidden!important;
+}
+
+@supports (height:100dvh){
+  #im3-react-root{
+    height:100dvh!important;
+    min-height:100dvh!important;
+  }
+}
+
+@supports (-webkit-touch-callout:none){
+  #im3-react-root{
+    height:-webkit-fill-available!important;
+    min-height:-webkit-fill-available!important;
+  }
+}
+
+#im3-react-root > .im3rx-loading:not(.compact){
+  place-self:center!important;
+  width:min(460px, calc(100vw - 32px))!important;
+  max-width:calc(100vw - 32px)!important;
+  min-height:230px!important;
+  max-height:calc(100svh - 32px)!important;
+  margin:auto!important;
+  overflow:auto!important;
+}
+
+#im3-react-root > .im3rx-app{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  place-self:stretch!important;
+  display:block!important;
+  overflow:hidden!important;
+}
+
+.im3rx-shell{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  display:grid!important;
+  grid-template-columns:clamp(232px, 19vw, 300px) minmax(0,1fr)!important;
+  overflow:hidden!important;
+}
+
+.im3rx-sidebar,
+.im3rx-main{
+  min-height:0!important;
+  -webkit-overflow-scrolling:touch;
+}
+
+.im3rx-sidebar{
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+}
+
+.im3rx-main{
+  height:100%!important;
+  max-height:none!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:calc(var(--im3rx-page-pad) + env(safe-area-inset-top,0px)) calc(var(--im3rx-page-pad) + env(safe-area-inset-right,0px)) calc(var(--im3rx-page-pad) + env(safe-area-inset-bottom,0px)) calc(var(--im3rx-page-pad) + env(safe-area-inset-left,0px))!important;
+}
+
+/* Apple-safe, uniform controls */
+.im3rx-header select,
+.im3rx-header button,
+.im3rx-card select,
+.im3rx-card button,
+.im3rx-field input,
+.im3rx-field select,
+.im3rx-ms > button,
+.im3rx-report-options input,
+.im3rx-report-options select{
+  height:var(--im3rx-control-h)!important;
+  min-height:var(--im3rx-control-h)!important;
+  border-radius:var(--im3rx-control-radius)!important;
+  font-size:16px!important;
+  line-height:1.2!important;
+  -webkit-appearance:none;
+  appearance:none;
+}
+
+.im3rx-field input,
+.im3rx-field select,
+.im3rx-header select,
+.im3rx-card select,
+.im3rx-report-options input,
+.im3rx-report-options select,
+.im3rx-ms > button{
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+
+.im3rx-header button,
+.im3rx-card button,
+.im3rx-actions button,
+.im3rx-icon-text,
+.im3rx-sidebar-refresh,
+.im3rx-theme,
+.im3rx-nav button{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:var(--im3rx-control-gap)!important;
+  white-space:nowrap!important;
+  text-align:center!important;
+  vertical-align:middle!important;
+}
+
+.im3rx-header button img,
+.im3rx-card button img,
+.im3rx-actions button img,
+.im3rx-icon-text img,
+.im3rx-nav button img,
+.im3rx-theme img,
+.im3rx-sidebar-refresh img{
+  width:18px!important;
+  height:18px!important;
+  min-width:18px!important;
+  min-height:18px!important;
+  flex:0 0 18px!important;
+  display:block!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  margin:0!important;
+}
+
+.im3rx-icon-btn{
+  width:42px!important;
+  min-width:42px!important;
+  height:42px!important;
+  min-height:42px!important;
+  padding:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:0!important;
+}
+
+.im3rx-icon-btn img{
+  width:19px!important;
+  height:19px!important;
+  min-width:19px!important;
+  min-height:19px!important;
+}
+
+.im3rx-refresh-glyph{
+  width:24px!important;
+  height:24px!important;
+  min-width:24px!important;
+  min-height:24px!important;
+  flex:0 0 24px!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  margin:0!important;
+}
+
+.im3rx-icon-btn .im3rx-refresh-glyph{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  min-height:30px!important;
+}
+
+.im3rx-refresh-glyph img{
+  width:17px!important;
+  height:17px!important;
+  min-width:17px!important;
+  min-height:17px!important;
+  margin:0!important;
+}
+
+.im3rx-card-head,
+.im3rx-header-controls,
+.im3rx-actions{
+  min-width:0!important;
+}
+
+.im3rx-header-controls,
+.im3rx-actions{
+  gap:12px!important;
+}
+
+.im3rx-header-controls > *,
+.im3rx-actions > *,
+.im3rx-card-head > *{
+  min-width:0!important;
+}
+
+.im3rx-field{
+  min-width:0!important;
+}
+
+.im3rx-field-label{
+  min-height:24px!important;
+  align-items:center!important;
+}
+
+.im3rx-field-label > span{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.im3rx-form-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(270px,100%),1fr))!important;
+  align-items:start!important;
+}
+
+.im3rx-kpis,
+.im3rx-mini-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))!important;
+}
+
+.im3rx-two-col,
+.im3rx-analysis-layout,
+.im3rx-dual-charts,
+.im3rx-report-layout{
+  grid-template-columns:repeat(auto-fit,minmax(min(390px,100%),1fr))!important;
+}
+
+.im3rx-chart-box{
+  min-height:320px!important;
+  height:clamp(320px, 44vh, 520px)!important;
+}
+
+.im3rx-table-wrap{
+  max-width:100%!important;
+  overflow:auto!important;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* Tablet landscape: keep professional left sidebar, compact controls. */
+@media (min-width:900px) and (max-width:1180px) and (orientation:landscape){
+  #im3-react-root,
+  #im3-react-root > .im3rx-app,
+  .im3rx-shell{
+    height:100vh!important;
+    min-height:100vh!important;
+    height:100svh!important;
+    min-height:100svh!important;
+  }
+
+  @supports (height:100dvh){
+    #im3-react-root,
+    #im3-react-root > .im3rx-app,
+    .im3rx-shell{
+      height:100dvh!important;
+      min-height:100dvh!important;
+    }
+  }
+
+  .im3rx-shell{
+    display:grid!important;
+    grid-template-columns:220px minmax(0,1fr)!important;
+    overflow:hidden!important;
+  }
+
+  .im3rx-sidebar{
+    width:auto!important;
+    height:100%!important;
+    max-height:none!important;
+    padding:12px!important;
+    overflow-y:auto!important;
+  }
+
+  .im3rx-main{
+    height:100%!important;
+    overflow-y:auto!important;
+    padding:14px!important;
+  }
+
+  .im3rx-brand-row{
+    grid-template-columns:minmax(0,1fr) 38px!important;
+    gap:8px!important;
+  }
+
+  .im3rx-clock-actions{
+    grid-template-columns:38px minmax(0,1fr) 38px!important;
+    gap:6px!important;
+  }
+
+  .im3rx-icon-btn{
+    width:38px!important;
+    min-width:38px!important;
+    height:38px!important;
+    min-height:38px!important;
+  }
+
+  .im3rx-nav{
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+  }
+
+  .im3rx-nav button{
+    justify-content:flex-start!important;
+    height:40px!important;
+    min-height:40px!important;
+    padding:0 10px!important;
+    font-size:13px!important;
+  }
+
+  .im3rx-header{
+    flex-direction:row!important;
+    align-items:flex-start!important;
+    gap:14px!important;
+    padding:16px!important;
+  }
+
+  .im3rx-header h1{
+    font-size:clamp(28px,3vw,34px)!important;
+  }
+
+  .im3rx-header-controls{
+    display:grid!important;
+    grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) auto!important;
+    align-items:end!important;
+    width:min(620px,55vw)!important;
+  }
+
+  .im3rx-ms{
+    min-width:0!important;
+    width:100%!important;
+  }
+
+  .im3rx-kpis{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+
+  .im3rx-kpi{
+    min-height:116px!important;
+    padding:14px!important;
+  }
+
+  .im3rx-kpi strong{
+    font-size:clamp(19px,2.1vw,24px)!important;
+  }
+
+  .im3rx-form-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  .im3rx-dual-charts,
+  .im3rx-report-layout{
+    grid-template-columns:1fr 1fr!important;
+  }
+}
+
+/* Tablet portrait and smaller tablet widths: compact top rail. */
+@media (min-width:641px) and (max-width:1024px) and (orientation:portrait),
+       (min-width:641px) and (max-width:899px){
+  #im3-react-root,
+  #im3-react-root > .im3rx-app,
+  .im3rx-shell{
+    width:100%!important;
+    height:100vh!important;
+    min-height:100vh!important;
+    height:100svh!important;
+    min-height:100svh!important;
+  }
+
+  @supports (height:100dvh){
+    #im3-react-root,
+    #im3-react-root > .im3rx-app,
+    .im3rx-shell{
+      height:100dvh!important;
+      min-height:100dvh!important;
+    }
+  }
+
+  .im3rx-shell{
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important;
+  }
+
+  .im3rx-sidebar{
+    width:100%!important;
+    height:auto!important;
+    max-height:min(34svh, 320px)!important;
+    flex:0 0 auto!important;
+    padding:12px 14px!important;
+    overflow-y:auto!important;
+  }
+
+  @supports (height:100dvh){
+    .im3rx-sidebar{
+      max-height:min(34dvh, 320px)!important;
+    }
+  }
+
+  .im3rx-main{
+    flex:1 1 auto!important;
+    height:auto!important;
+    min-height:0!important;
+    overflow-y:auto!important;
+    padding:14px!important;
+  }
+
+  .im3rx-brand-row{
+    grid-template-columns:minmax(0,1fr) 42px!important;
+    gap:10px!important;
+  }
+
+  .im3rx-clock-actions{
+    grid-template-columns:42px minmax(0,1fr) 42px!important;
+  }
+
+  .im3rx-nav{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  .im3rx-nav button{
+    min-height:42px!important;
+    height:42px!important;
+    padding:0 9px!important;
+    font-size:13px!important;
+  }
+
+  .im3rx-header{
+    flex-direction:column!important;
+    padding:16px!important;
+  }
+
+  .im3rx-header-controls{
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    align-items:end!important;
+  }
+
+  .im3rx-header-controls .im3rx-icon-text{
+    grid-column:1 / -1!important;
+    width:100%!important;
+  }
+
+  .im3rx-kpis{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  .im3rx-form-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  .im3rx-two-col,
+  .im3rx-analysis-layout,
+  .im3rx-dual-charts,
+  .im3rx-report-layout{
+    grid-template-columns:1fr!important;
+  }
+}
+
+/* iPhone and narrow phones */
+@media(max-width:640px){
+  #im3-react-root,
+  #im3-react-root > .im3rx-app,
+  .im3rx-shell{
+    width:100%!important;
+    height:100vh!important;
+    min-height:100vh!important;
+    height:100svh!important;
+    min-height:100svh!important;
+  }
+
+  @supports (height:100dvh){
+    #im3-react-root,
+    #im3-react-root > .im3rx-app,
+    .im3rx-shell{
+      height:100dvh!important;
+      min-height:100dvh!important;
+    }
+  }
+
+  .im3rx-shell{
+    display:flex!important;
+    flex-direction:column!important;
+    overflow:hidden!important;
+  }
+
+  .im3rx-sidebar{
+    width:100%!important;
+    height:auto!important;
+    max-height:min(42svh, 340px)!important;
+    flex:0 0 auto!important;
+    padding:12px!important;
+  }
+
+  .im3rx-main{
+    flex:1 1 auto!important;
+    height:auto!important;
+    min-height:0!important;
+    overflow-y:auto!important;
+    padding:12px!important;
+  }
+
+  .im3rx-nav{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  .im3rx-header,
+  .im3rx-card{
+    padding:14px!important;
+  }
+
+  .im3rx-header-controls,
+  .im3rx-actions,
+  .im3rx-card-head,
+  .im3rx-form-grid,
+  .im3rx-kpis,
+  .im3rx-mini-grid,
+  .im3rx-two-col,
+  .im3rx-analysis-layout,
+  .im3rx-dual-charts,
+  .im3rx-report-layout{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    width:100%!important;
+  }
+
+  .im3rx-header button,
+  .im3rx-card button,
+  .im3rx-actions button,
+  .im3rx-icon-text{
+    width:100%!important;
+  }
+
+  .im3rx-chart-box{
+    height:320px!important;
+    min-height:280px!important;
+  }
+
+  .im3rx-ms-menu{
+    left:12px!important;
+    right:12px!important;
+    width:auto!important;
+  }
+}
+
+@media(max-width:430px){
+  .im3rx-nav{
+    grid-template-columns:1fr!important;
+  }
+
+  .im3rx-clock-actions{
+    grid-template-columns:38px minmax(0,1fr) 38px!important;
+  }
+
+  .im3rx-icon-btn{
+    width:38px!important;
+    min-width:38px!important;
+    height:38px!important;
+    min-height:38px!important;
+  }
+}

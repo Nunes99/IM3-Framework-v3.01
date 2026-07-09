@@ -1,177 +1,3 @@
-
-/* ============================================================
- * IM³ React API fallback bridge v7.5.1
- * Loads before legacy code, so the React UI never starts without
- * window.IM3Api even if the old DOM interface is disabled or delayed.
- * ============================================================ */
-(function installIM3ApiFallback(){
-  const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbxb6kOjfBkquGrc65P_28GRxL-ad_uzo9mcV7ZHhudO8YMdzBjXmfxNss_yFjPIZKHJ/exec";
-  window.IM3_API_URL = window.IM3_API_URL || DEFAULT_API_URL;
-
-  function encodePayload(obj) {
-    const json = JSON.stringify(obj || {});
-    if (window.TextEncoder) {
-      const utf8 = new TextEncoder().encode(json);
-      let binary = "";
-      utf8.forEach(b => binary += String.fromCharCode(b));
-      return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-    }
-    return btoa(unescape(encodeURIComponent(json))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  }
-
-  function normalizeError(error) {
-    if (!error) return "Unknown error";
-    if (typeof error === "string") return error;
-    if (error.message) return error.message;
-    try { return JSON.stringify(error); } catch (err) { return String(error); }
-  }
-
-  function apiCall(action, params = {}, timeoutMs = 45000) {
-    return new Promise((resolve, reject) => {
-      const cb = "im3_cb_" + Math.random().toString(36).slice(2);
-      const script = document.createElement("script");
-      let done = false;
-      const timer = setTimeout(() => {
-        if (done) return;
-        done = true;
-        delete window[cb];
-        script.remove();
-        reject(new Error("Request timeout: " + action));
-      }, timeoutMs);
-
-      window[cb] = (resp) => {
-        if (done) return;
-        done = true;
-        clearTimeout(timer);
-        delete window[cb];
-        script.remove();
-        if (!resp || resp.ok === false) reject(new Error((resp && resp.error) || "API error: " + action));
-        else resolve(resp.data || resp);
-      };
-
-      const query = new URLSearchParams(Object.assign({ action, callback: cb, _ts: String(Date.now()) }, params || {}));
-      script.src = String(window.IM3_API_URL || DEFAULT_API_URL) + "?" + query.toString();
-      script.onerror = () => {
-        if (done) return;
-        done = true;
-        clearTimeout(timer);
-        delete window[cb];
-        script.remove();
-        const size = script.src ? Math.round(script.src.length / 1024) : 0;
-        reject(new Error("Failed to reach Apps Script API for action '" + action + "'. Check deployment URL/access permissions. If this happened while generating a report with charts, the JSONP request may be too large (" + size + " KB)."));
-      };
-      document.body.appendChild(script);
-    });
-  }
-
-  function formatNumber(value, digits = 2) {
-    if (value === null || value === undefined || value === "") return "—";
-    const n = typeof value === "number" ? value : Number(String(value).replace(/,/g, "").replace(/%/g, "").replace(/[^0-9.-]/g, ""));
-    if (Number.isNaN(n)) return String(value);
-    return new Intl.NumberFormat("en-US", { maximumFractionDigits: digits }).format(n);
-  }
-
-  function formatCurrency(value, currency = "USD") {
-    if (value === null || value === undefined || value === "") return "—";
-    const n = typeof value === "number" ? value : Number(String(value).replace(/,/g, "").replace(/[^0-9.-]/g, ""));
-    if (Number.isNaN(n)) return String(value);
-    const abs = Math.abs(n);
-    if (abs >= 1e9) return (n / 1e9).toFixed(2) + "B " + currency;
-    if (abs >= 1e6) return (n / 1e6).toFixed(2) + "M " + currency;
-    return new Intl.NumberFormat("en-US", { style:"currency", currency, maximumFractionDigits:0 }).format(n);
-  }
-
-  function formatPercent(value, digits = 2) {
-    if (value === null || value === undefined || value === "") return "—";
-    const raw = String(value);
-    let n = typeof value === "number" ? value : Number(raw.replace(/,/g, "").replace(/%/g, "").replace(/[^0-9.-]/g, ""));
-    if (Number.isNaN(n)) return raw;
-    if (!raw.includes("%") && Math.abs(n) <= 1) n *= 100;
-    return n.toFixed(digits) + "%";
-  }
-
-  function isOutputLikeKey(key) {
-    return /(^__|display|decision|recommendation|score|npv|irr|payback|revenue|ebitda|ebit|tax|cash_flow|discount|pv_|cumulative|system_dynamics|monte_carlo|risk_label|api_status|last_update)/i.test(String(key || ""));
-  }
-
-  const fallbackApi = {
-    call: apiCall,
-    encode: encodePayload,
-    normalizeError,
-    formatNumber,
-    formatCurrency,
-    formatPercent,
-    isOutputLikeKey,
-    async loadMetadata(){ try { return await apiCall("metadatafast", {}, 45000); } catch (err) { return apiCall("metadata", {}, 45000); } },
-    async loadDropdowns(){ try { return await apiCall("dropdowns", { scope:"all" }, 45000); } catch (err) { return apiCall("configoptions", {}, 45000); } },
-    async loadFilterOptions(){ return apiCall("filteroptions", {}, 45000); },
-    async loadProjects(){ return apiCall("projects", {}, 45000); },
-    async loadModule(moduleId, filters = {}, key = ""){
-      const params = { moduleId, filters: encodePayload(filters) };
-      if (key) { params.key = key; params.rowId = key; }
-      return apiCall("module", params, 45000);
-    },
-    async manualSave(moduleId, payload = {}, key = ""){
-      const params = { moduleId, payload: encodePayload(payload) };
-      if (key) { params.key = key; params.rowId = key; }
-      return apiCall("manualsave", params, 70000);
-    },
-    async loadDashboard(filters = {}, projectId = ""){
-      const params = { filters: encodePayload(filters) };
-      if (projectId) params.projectId = projectId;
-      return apiCall("dashboard", params, 45000);
-    },
-    async loadSummaryData(view = "production_summary", filters = {}, projectId = ""){
-      const params = { view, filters: encodePayload(filters) };
-      if (projectId) params.projectId = projectId;
-      return apiCall("summarydata", params, 45000);
-    },
-    async loadTimeseries({ metrics = [], filters = {}, projectId = "", startYear = "", endYear = "", groupBy = "Project_Name" } = {}){
-      const params = { metrics: Array.isArray(metrics) ? metrics.join(",") : String(metrics || ""), filters: encodePayload(filters), groupBy };
-      if (projectId) params.projectId = projectId;
-      if (startYear) params.startYear = startYear;
-      if (endYear) params.endYear = endYear;
-      return apiCall("timeseries", params, 60000);
-    },
-    async generatePdf(type = "executive", projectId = "", language = "en", filters = {}, options = {}){
-      const action = type === "technical" ? "technicalreport" : (type === "detailed" ? "detailedreport" : "pdf");
-      const params = { projectId, language, filters: encodePayload(filters), options: encodePayload(options) };
-      if (options && options.orientation) params.orientation = options.orientation;
-      if (options && options.paperSize) params.paperSize = options.paperSize;
-      return apiCall(action, params, 120000);
-    },
-    async generateInvestmentPack(projectId = "", language = "en", filters = {}, options = {}){
-      const params = { projectId, language, filters: encodePayload(filters), options: encodePayload(options) };
-      if (options && options.orientation) params.orientation = options.orientation;
-      if (options && options.paperSize) params.paperSize = options.paperSize;
-      return apiCall("investmentpack", params, 180000);
-    },
-    async runDiagnostics(){ return apiCall("diagnostics", {}, 60000); },
-    async health(){ return apiCall("health", {}, 30000); },
-    async clearCache(){ return apiCall("clearcache", {}, 30000); },
-    buildProjectFilter(projectId){ return projectId ? { projectIds:[projectId] } : {}; }
-  };
-
-  window.IM3Api = window.IM3Api || fallbackApi;
-  window.im3ApiCall = window.im3ApiCall || apiCall;
-  window.im3LoadMetadata = window.im3LoadMetadata || (() => window.IM3Api.loadMetadata());
-  window.im3LoadDropdowns = window.im3LoadDropdowns || (() => window.IM3Api.loadDropdowns());
-  window.im3LoadProjects = window.im3LoadProjects || (() => window.IM3Api.loadProjects());
-  window.im3LoadModule = window.im3LoadModule || ((moduleId, filters = {}, key = "") => window.IM3Api.loadModule(moduleId, filters, key));
-  window.im3ManualSave = window.im3ManualSave || ((moduleId, payload = {}, key = "") => window.IM3Api.manualSave(moduleId, payload, key));
-  window.im3LoadDashboard = window.im3LoadDashboard || ((filters = {}, projectId = "") => window.IM3Api.loadDashboard(filters, projectId));
-  window.im3LoadSummaryData = window.im3LoadSummaryData || ((view, filters = {}, projectId = "") => window.IM3Api.loadSummaryData(view, filters, projectId));
-  window.im3LoadTimeseries = window.im3LoadTimeseries || ((params = {}) => window.IM3Api.loadTimeseries(params));
-  window.im3GeneratePdf = window.im3GeneratePdf || ((type, projectId, language, filters, options) => window.IM3Api.generatePdf(type, projectId, language, filters, options));
-  window.im3GenerateInvestmentPack = window.im3GenerateInvestmentPack || ((projectId, language, filters, options) => window.IM3Api.generateInvestmentPack(projectId, language, filters, options));
-  window.im3RunDiagnostics = window.im3RunDiagnostics || (() => window.IM3Api.runDiagnostics());
-  window.im3ClearGeneratedReports = window.im3ClearGeneratedReports || (() => ({ cleared:true }));
-  window.im3FormatNumber = window.im3FormatNumber || formatNumber;
-  window.im3FormatCurrency = window.im3FormatCurrency || formatCurrency;
-  window.im3FormatPercent = window.im3FormatPercent || formatPercent;
-  window.im3NormalizeError = window.im3NormalizeError || normalizeError;
-})();
-
 if (window.Chart) {
   Chart.defaults.font.family = "'PT Sans', Arial, sans-serif";
   Chart.defaults.color = "#193A64";
@@ -179,8 +5,7 @@ if (window.Chart) {
   Chart.defaults.plugins.legend.labels.usePointStyle = true;
 }
 
-const IM3_API_URL = window.IM3_API_URL || "https://script.google.com/macros/s/AKfycbxb6kOjfBkquGrc65P_28GRxL-ad_uzo9mcV7ZHhudO8YMdzBjXmfxNss_yFjPIZKHJ/exec";
-window.IM3_API_URL = IM3_API_URL;
+const IM3_API_URL = "https://script.google.com/macros/s/AKfycbzYPTHufhToOZlingFhF5acagEnRIg63Dv3a0AAFsUspsAIUHpKoCfSFbq5LLssfUlD/exec";
 
 const ICONS8 = {
   projects: "https://img.icons8.com/fluency-systems-regular/48/project.png",
@@ -256,9 +81,6 @@ function im3MergeDropdownMaps(...maps) {
     Object.keys(map).forEach(key => {
       const value = map[key];
       if (Array.isArray(value)) merged[key] = value;
-      else if (value && typeof value === "object" && Array.isArray(value.options)) merged[key] = value.options;
-      else if (value && typeof value === "object" && Array.isArray(value.values)) merged[key] = value.values;
-      else if (value && typeof value === "object" && Array.isArray(value.items)) merged[key] = value.items;
     });
   });
   return merged;
@@ -322,9 +144,7 @@ function im3Jsonp(action, params={}, timeoutMs=30000) {
       done=true;
       clearTimeout(timer);
       delete window[cb];
-      script.remove();
-      const size = script.src ? Math.round(script.src.length / 1024) : 0;
-      reject("Failed to reach Apps Script API for action '" + action + "'. Check deployment URL/access permissions. If this happened while generating a report with charts, the JSONP request may be too large (" + size + " KB).");
+      reject("Failed to reach Apps Script API. Check deployment URL and access permissions.");
     };
     document.body.appendChild(script);
   });
@@ -1444,30 +1264,25 @@ async function im3GenerateInvestmentPack() {
 }
 function im3ToggleTheme() { const app=document.getElementById("im3-app"); const isNight=app.getAttribute("data-theme")==="night"; app.setAttribute("data-theme", isNight?"day":"night"); document.getElementById("im3ThemeText").textContent=isNight?"Night mode":"Day mode"; document.getElementById("im3ThemeIcon").src=isNight?"https://img.icons8.com/fluency-systems-regular/48/moon-symbol.png":"https://img.icons8.com/fluency-systems-regular/48/sun.png"; }
 
-function im3BindLegacyControl(id, eventName, handler) {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener(eventName, handler);
-}
-
-im3BindLegacyControl("im3RefreshBtn", "click", () => im3LoadModule(im3State.currentModule.id, document.getElementById("im3RowSelect").value));
-im3BindLegacyControl("im3SaveBtn", "click", () => im3SaveCurrent());
-im3BindLegacyControl("im3NextBtn", "click", async () => { const ok = await im3SaveCurrent(); if (ok) im3LoadModuleByIndex(im3State.moduleIndex + 1); });
-im3BindLegacyControl("im3BackBtn", "click", () => im3LoadModuleByIndex(im3State.moduleIndex - 1));
-im3BindLegacyControl("im3PdfBtn", "click", im3GeneratePdf);
+document.getElementById("im3RefreshBtn").addEventListener("click",()=>im3LoadModule(im3State.currentModule.id,document.getElementById("im3RowSelect").value));
+document.getElementById("im3SaveBtn").addEventListener("click",()=>im3SaveCurrent());
+document.getElementById("im3NextBtn").addEventListener("click",async()=>{const ok=await im3SaveCurrent(); if(ok) im3LoadModuleByIndex(im3State.moduleIndex+1);});
+document.getElementById("im3BackBtn").addEventListener("click",()=>im3LoadModuleByIndex(im3State.moduleIndex-1));
+document.getElementById("im3PdfBtn").addEventListener("click",im3GeneratePdf);
 const im3DetailedBtn = document.getElementById("im3DetailedReportBtn");
 if (im3DetailedBtn) im3DetailedBtn.addEventListener("click", im3GenerateDetailedReport);
 const im3InvestmentPackBtn = document.getElementById("im3InvestmentPackBtn");
 if (im3InvestmentPackBtn) im3InvestmentPackBtn.addEventListener("click", im3GenerateInvestmentPack);
 const im3ClearReportsBtn = document.getElementById("im3ClearReportsBtn");
 if (im3ClearReportsBtn) im3ClearReportsBtn.addEventListener("click", im3ClearGeneratedReports);
-im3BindLegacyControl("im3ApplyFiltersBtn", "click", im3ApplyFilters);
-im3BindLegacyControl("im3ClearFiltersBtn", "click", im3ClearFilters);
-im3BindLegacyControl("im3RepairBtn", "click", im3RepairFormulas);
-im3BindLegacyControl("im3BuildChartBtn", "click", im3BuildChart);
-im3BindLegacyControl("chartTemplate", "change", e => im3ApplyGraphTemplate(e.target.value));
-im3BindLegacyControl("im3ClearChartBtn", "click", im3ClearActiveChart);
-im3BindLegacyControl("im3SummaryRefreshBtn", "click", im3LoadSelectedSummary);
-im3BindLegacyControl("im3ThemeToggle", "click", im3ToggleTheme);
+document.getElementById("im3ApplyFiltersBtn").addEventListener("click",im3ApplyFilters);
+document.getElementById("im3ClearFiltersBtn").addEventListener("click",im3ClearFilters);
+document.getElementById("im3RepairBtn").addEventListener("click",im3RepairFormulas);
+document.getElementById("im3BuildChartBtn").addEventListener("click",im3BuildChart);
+document.getElementById("chartTemplate").addEventListener("change", e => im3ApplyGraphTemplate(e.target.value));
+document.getElementById("im3ClearChartBtn").addEventListener("click", im3ClearActiveChart);
+document.getElementById("im3SummaryRefreshBtn").addEventListener("click", im3LoadSelectedSummary);
+document.getElementById("im3ThemeToggle").addEventListener("click",im3ToggleTheme);
 
 
 /* ===== v2.5 project-level dashboard cards override ===== */
@@ -3078,19 +2893,13 @@ document.addEventListener("DOMContentLoaded", () => {
       return apiCall("timeseries", params, 60000);
     },
 
-    async generatePdf(type = "executive", projectId = "", language = "en", filters = {}, options = {}) {
-      const action = type === "technical" ? "technicalreport" : (type === "detailed" ? "detailedreport" : "pdf");
-      const params = { projectId, language, filters: filtersToParam(filters), options: filtersToParam(options) };
-      if (options && options.orientation) params.orientation = options.orientation;
-      if (options && options.paperSize) params.paperSize = options.paperSize;
-      return apiCall(action, params, 120000);
+    async generatePdf(type = "executive", projectId = "", language = "en", filters = {}) {
+      const action = type === "technical" || type === "detailed" ? "detailedreport" : "pdf";
+      return apiCall(action, { projectId, language, filters: filtersToParam(filters) }, 120000);
     },
 
-    async generateInvestmentPack(projectId = "", language = "en", filters = {}, options = {}) {
-      const params = { projectId, language, filters: filtersToParam(filters), options: filtersToParam(options) };
-      if (options && options.orientation) params.orientation = options.orientation;
-      if (options && options.paperSize) params.paperSize = options.paperSize;
-      return apiCall("investmentpack", params, 180000);
+    async generateInvestmentPack(projectId = "", language = "en", filters = {}) {
+      return apiCall("investmentpack", { projectId, language, filters: filtersToParam(filters) }, 180000);
     },
 
     async runDiagnostics() {
@@ -3120,8 +2929,8 @@ document.addEventListener("DOMContentLoaded", () => {
   window.im3LoadDashboard = (filters = {}, projectId = "") => IM3Api.loadDashboard(filters, projectId);
   window.im3LoadSummaryData = (view, filters = {}, projectId = "") => IM3Api.loadSummaryData(view, filters, projectId);
   window.im3LoadTimeseries = (params = {}) => IM3Api.loadTimeseries(params);
-  window.im3GeneratePdf = (type, projectId, language, filters, options) => IM3Api.generatePdf(type, projectId, language, filters, options);
-  window.im3GenerateInvestmentPack = (projectId, language, filters, options) => IM3Api.generateInvestmentPack(projectId, language, filters, options);
+  window.im3GeneratePdf = (type, projectId, language, filters) => IM3Api.generatePdf(type, projectId, language, filters);
+  window.im3GenerateInvestmentPack = (projectId, language, filters) => IM3Api.generateInvestmentPack(projectId, language, filters);
   window.im3RunDiagnostics = () => IM3Api.runDiagnostics();
   window.im3ClearGeneratedReports = () => ({ cleared:true });
   window.im3FormatNumber = formatNumber;
