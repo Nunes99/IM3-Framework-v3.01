@@ -2603,3 +2603,202 @@ html:has(#im3-app), body:has(#im3-app){
   background:linear-gradient(90deg,var(--im3rx-secondary),var(--im3rx-accent));
   animation:none!important;
 }
+
+/* ============================================================
+   IM3 responsive UX refinements v9.4
+   ============================================================ */
+.im3rx-brand-row{
+  grid-template-columns:minmax(0,1fr) 42px;
+  align-items:center;
+}
+
+.im3rx-clock-actions{
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) 42px;
+  align-items:center;
+  gap:8px;
+  text-align:center;
+}
+
+.im3rx-clock-actions .im3rx-icon-btn{
+  background:rgba(255,255,255,.10)!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+}
+
+.im3rx-clock-text{
+  min-width:0;
+}
+
+.im3rx-bell-btn{
+  justify-self:end;
+}
+
+.im3rx-field,
+.im3rx-report-options label,
+.im3rx-graph-grid label{
+  min-width:0;
+}
+
+.im3rx-field input,
+.im3rx-field select,
+.im3rx-header select,
+.im3rx-header button,
+.im3rx-card select,
+.im3rx-card button,
+.im3rx-ms>button{
+  min-height:42px!important;
+}
+
+.im3rx-field input,
+.im3rx-field select,
+.im3rx-card select,
+.im3rx-header select{
+  width:100%;
+}
+
+.im3rx-ms-option,
+.im3rx-toggle{
+  flex-direction:row!important;
+  justify-content:flex-start!important;
+  text-align:left;
+}
+
+.im3rx-ms-option input,
+.im3rx-toggle input{
+  order:0;
+  width:16px;
+  height:16px;
+  flex:0 0 16px;
+  margin:0;
+  accent-color:var(--im3rx-secondary);
+}
+
+.im3rx-ms-option span,
+.im3rx-toggle span{
+  order:1;
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+
+.im3rx-report-preview.landscape{
+  min-height:190px;
+}
+
+.im3rx-report-preview.portrait{
+  max-width:520px;
+}
+
+.im3rx-report-thumbs{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+
+.im3rx-report-thumbs figure{
+  margin:0;
+  border:1px solid var(--im3rx-border);
+  border-radius:6px;
+  background:var(--im3rx-surface-2);
+  overflow:hidden;
+}
+
+.im3rx-report-thumbs img,
+.im3rx-report-thumbs span{
+  display:block;
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  background:linear-gradient(135deg,var(--im3rx-surface-2),var(--im3rx-border));
+}
+
+.im3rx-report-thumbs figcaption{
+  padding:6px 8px;
+  font-size:11px;
+  color:var(--im3rx-muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.im3rx-app[data-theme="night"],
+.im3rx-app[data-theme="night"] *{
+  color:var(--im3rx-text);
+}
+
+.im3rx-app[data-theme="night"]{
+  --im3rx-text:#F8FBFF;
+  --im3rx-muted:#D5DFEC;
+}
+
+.im3rx-app[data-theme="night"] small,
+.im3rx-app[data-theme="night"] .im3rx-muted,
+.im3rx-app[data-theme="night"] .im3rx-ms>button small,
+.im3rx-app[data-theme="night"] .im3rx-report-preview p,
+.im3rx-app[data-theme="night"] .im3rx-report-thumbs figcaption{
+  color:#D5DFEC!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-icon-btn img,
+.im3rx-app[data-theme="night"] .im3rx-card button img,
+.im3rx-app[data-theme="night"] .im3rx-kpi-icon img{
+  filter:brightness(0) saturate(100%) invert(88%) sepia(28%) saturate(617%) hue-rotate(178deg) brightness(104%) contrast(101%)!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-nav button.active img,
+.im3rx-app[data-theme="night"] .im3rx-card button.primary img{
+  filter:brightness(0) saturate(100%) invert(88%) sepia(72%) saturate(466%) hue-rotate(354deg) brightness(105%) contrast(96%)!important;
+}
+
+@media(max-width:1180px){
+  .im3rx-sidebar{
+    padding:14px!important;
+  }
+
+  .im3rx-brand-row{
+    grid-template-columns:minmax(0,1fr) 42px;
+    gap:10px;
+  }
+
+  .im3rx-clock-actions{
+    grid-column:1 / -1;
+  }
+}
+
+@media(max-width:760px){
+  .im3rx-brand-row{
+    padding-bottom:12px;
+  }
+
+  .im3rx-brand{
+    min-width:0;
+  }
+
+  .im3rx-brand strong,
+  .im3rx-brand span{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .im3rx-bell-btn{
+    grid-column:2;
+    grid-row:1;
+  }
+
+  .im3rx-clock-actions{
+    grid-template-columns:42px minmax(0,1fr) 42px;
+  }
+
+  .im3rx-header-controls,
+  .im3rx-actions,
+  .im3rx-graph-grid,
+  .im3rx-form-grid{
+    gap:10px!important;
+  }
+
+  .im3rx-report-thumbs{
+    grid-template-columns:1fr;
+  }
+}
