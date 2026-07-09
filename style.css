@@ -4529,3 +4529,298 @@ body{
     min-height:38px!important;
   }
 }
+
+/* ============================================================
+   IM3 Mobile/Nav/Button polish v13.0
+   - navigation icon + text aligned left on every device
+   - no fixed lower block behavior on mobile; natural document scroll
+   - Apple/iPad brand font sizing to avoid line breaks
+   - consistent button/icon geometry
+   - improved report-chart checkbox/switch
+   ============================================================ */
+:root{
+  --im3rx-btn-gap:9px;
+  --im3rx-btn-icon:18px;
+  --im3rx-nav-icon:24px;
+}
+
+/* Navigation: always left-aligned, including iPad portrait and mobile. */
+.im3rx-nav button,
+.im3rx-sidebar .im3rx-nav button,
+.im3rx-nav button.active{
+  justify-content:flex-start!important;
+  text-align:left!important;
+  padding-left:16px!important;
+  padding-right:14px!important;
+  gap:10px!important;
+  min-width:0!important;
+}
+.im3rx-nav button i,
+.im3rx-nav button .im3rx-animated-icon{
+  flex:0 0 var(--im3rx-nav-icon)!important;
+  width:var(--im3rx-nav-icon)!important;
+  height:var(--im3rx-nav-icon)!important;
+  min-width:var(--im3rx-nav-icon)!important;
+  display:inline-grid!important;
+  place-items:center!important;
+}
+.im3rx-nav button img{
+  width:18px!important;
+  height:18px!important;
+  flex:0 0 18px!important;
+  object-fit:contain!important;
+}
+.im3rx-nav button span{
+  display:block!important;
+  min-width:0!important;
+  flex:1 1 auto!important;
+  text-align:left!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+/* Brand text: prevent awkward line breaks on iPad/tablet. */
+.im3rx-brand{min-width:0!important;}
+.im3rx-brand > div:last-child{min-width:0!important;}
+.im3rx-brand strong,
+.im3rx-brand span{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:100%!important;
+}
+.im3rx-brand strong{font-size:clamp(13px,1.15vw,16px)!important;}
+.im3rx-brand span{font-size:clamp(10.5px,.95vw,12px)!important;}
+
+/* Standardize all icon+text buttons. Navigation is intentionally excluded above. */
+.im3rx-header button:not(.im3rx-icon-btn),
+.im3rx-card button:not(.im3rx-icon-btn),
+.im3rx-actions button:not(.im3rx-icon-btn),
+.im3rx-icon-text{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:var(--im3rx-btn-gap)!important;
+  text-align:center!important;
+  min-height:46px!important;
+  height:auto!important;
+  padding:0 14px!important;
+  line-height:1.15!important;
+}
+.im3rx-header button:not(.im3rx-icon-btn) img,
+.im3rx-card button:not(.im3rx-icon-btn) img,
+.im3rx-actions button:not(.im3rx-icon-btn) img,
+.im3rx-icon-text img,
+.im3rx-save-glyph img,
+.im3rx-refresh-glyph img{
+  width:var(--im3rx-btn-icon)!important;
+  height:var(--im3rx-btn-icon)!important;
+  min-width:var(--im3rx-btn-icon)!important;
+  min-height:var(--im3rx-btn-icon)!important;
+  flex:0 0 var(--im3rx-btn-icon)!important;
+  object-fit:contain!important;
+  margin:0!important;
+}
+.im3rx-save-glyph,
+.im3rx-refresh-glyph{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:var(--im3rx-btn-icon)!important;
+  height:var(--im3rx-btn-icon)!important;
+  min-width:var(--im3rx-btn-icon)!important;
+  flex:0 0 var(--im3rx-btn-icon)!important;
+}
+
+/* Better checkbox/switch for report chart inclusion. */
+.im3rx-report-options .im3rx-toggle{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:12px!important;
+  min-height:54px!important;
+  padding:10px 12px!important;
+  border:1px solid var(--im3rx-border)!important;
+  border-radius:8px!important;
+  background:var(--im3rx-surface)!important;
+  cursor:pointer!important;
+}
+.im3rx-report-options .im3rx-toggle input[type="checkbox"]{
+  -webkit-appearance:none!important;
+  appearance:none!important;
+  width:42px!important;
+  height:24px!important;
+  min-width:42px!important;
+  border-radius:999px!important;
+  border:1px solid var(--im3rx-border)!important;
+  background:var(--im3rx-surface-2)!important;
+  position:relative!important;
+  cursor:pointer!important;
+  margin:0!important;
+  transition:.18s ease!important;
+}
+.im3rx-report-options .im3rx-toggle input[type="checkbox"]::after{
+  content:"";
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 2px 6px rgba(0,0,0,.18);
+  transition:.18s ease;
+}
+.im3rx-report-options .im3rx-toggle input[type="checkbox"]:checked{
+  background:var(--im3rx-secondary)!important;
+  border-color:var(--im3rx-secondary)!important;
+}
+.im3rx-report-options .im3rx-toggle input[type="checkbox"]:checked::after{
+  transform:translateX(18px);
+}
+.im3rx-report-options .im3rx-toggle span{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  font-size:14px!important;
+  line-height:1.25!important;
+  color:var(--im3rx-text)!important;
+  font-weight:900!important;
+}
+
+/* Apple/tablet control consistency. */
+.im3rx-header select,
+.im3rx-card select,
+.im3rx-field input,
+.im3rx-field select,
+.im3rx-report-options input,
+.im3rx-report-options select,
+.im3rx-ms > button{
+  min-height:46px!important;
+  height:46px!important;
+  font-size:16px!important;
+  box-sizing:border-box!important;
+}
+.im3rx-field-label,
+.im3rx-field-label span,
+.im3rx-ms > span,
+.im3rx-report-options label > span{
+  line-height:1.25!important;
+}
+
+/* Mobile: remove fixed/locked lower-block behavior. Use natural page scroll. */
+@media(max-width:640px){
+  html, body{
+    height:auto!important;
+    min-height:100%!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    overscroll-behavior-y:auto!important;
+  }
+  #im3-react-root{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:100svh!important;
+    overflow:visible!important;
+    place-items:initial!important;
+  }
+  @supports (height:100dvh){
+    #im3-react-root{min-height:100dvh!important;}
+  }
+  #im3-react-root > .im3rx-app{
+    display:block!important;
+    height:auto!important;
+    min-height:100svh!important;
+    overflow:visible!important;
+  }
+  .im3rx-shell{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:100svh!important;
+    overflow:visible!important;
+    border-radius:0!important;
+    border-left:0!important;
+    border-right:0!important;
+  }
+  .im3rx-sidebar{
+    position:relative!important;
+    width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+    padding:12px!important;
+  }
+  .im3rx-main{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+    padding:12px!important;
+  }
+  .im3rx-nav{
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+  }
+  .im3rx-nav button{
+    width:100%!important;
+    min-height:44px!important;
+    height:44px!important;
+    justify-content:flex-start!important;
+    text-align:left!important;
+  }
+  .im3rx-brand strong{font-size:15px!important;}
+  .im3rx-brand span{font-size:11px!important;}
+  .im3rx-header-controls,
+  .im3rx-actions,
+  .im3rx-card-head,
+  .im3rx-form-grid,
+  .im3rx-kpis,
+  .im3rx-mini-grid,
+  .im3rx-two-col,
+  .im3rx-analysis-layout,
+  .im3rx-dual-charts,
+  .im3rx-report-layout{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    width:100%!important;
+  }
+  .im3rx-header button:not(.im3rx-icon-btn),
+  .im3rx-card button:not(.im3rx-icon-btn),
+  .im3rx-actions button:not(.im3rx-icon-btn),
+  .im3rx-icon-text{
+    width:100%!important;
+  }
+  .im3rx-report-options .im3rx-toggle{
+    width:100%!important;
+  }
+}
+
+/* iPad portrait: left-align nav within the compact top rail and avoid brand wrap. */
+@media (min-width:641px) and (max-width:1024px) and (orientation:portrait),
+       (min-width:641px) and (max-width:899px){
+  .im3rx-nav button{
+    justify-content:flex-start!important;
+    text-align:left!important;
+    padding-left:12px!important;
+  }
+  .im3rx-brand strong{font-size:14px!important;}
+  .im3rx-brand span{font-size:10.5px!important;}
+  .im3rx-logo{width:42px!important;height:42px!important;min-width:42px!important;}
+}
+
+/* iPad/tablet landscape: compact brand, left-aligned nav. */
+@media (min-width:900px) and (max-width:1180px) and (orientation:landscape){
+  .im3rx-brand strong{font-size:13.5px!important;}
+  .im3rx-brand span{font-size:10px!important;}
+  .im3rx-logo{width:40px!important;height:40px!important;min-width:40px!important;}
+  .im3rx-nav button{
+    justify-content:flex-start!important;
+    text-align:left!important;
+    padding-left:11px!important;
+  }
+}

@@ -29,7 +29,7 @@ const IM3_ACTION_ICONS = {
   image: "https://img.icons8.com/fluency-systems-regular/48/image.png",
   report: "https://img.icons8.com/fluency-systems-regular/48/report-card.png",
   rows: "https://img.icons8.com/fluency-systems-regular/48/table.png",
-  save: "https://img.icons8.com/fluency-systems-regular/48/cloud-upload.png",
+  save: "https://img.icons8.com/fluency-systems-regular/48/save.png",
   success: "https://img.icons8.com/fluency-systems-regular/48/checked.png",
   warning: "https://img.icons8.com/fluency-systems-regular/48/error.png",
   empty: "https://img.icons8.com/fluency-systems-regular/48/empty-box.png",
