@@ -5,7 +5,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./style.css?v=20260709-responsive-report-fix">
+  <link rel="stylesheet" href="./style.css?v=20260709-report-branding-fix">
 
 <div id="im3-react-root">
   <div class="im3rx-loading">
@@ -88,7 +88,8 @@
         clearTimeout(timer);
         delete window[cb];
         script.remove();
-        reject(new Error("Failed to reach Apps Script API. Check deployment URL and access permissions."));
+        const size = script.src ? Math.round(script.src.length / 1024) : 0;
+        reject(new Error("Failed to reach Apps Script API for action '" + action + "'. Check deployment URL/access permissions. If this happened while generating a report with charts, the JSONP request may be too large (" + size + " KB)."));
       };
       document.body.appendChild(script);
     });
@@ -163,12 +164,18 @@
       if (endYear) params.endYear = endYear;
       return apiCall("timeseries", params, 60000);
     },
-    async generatePdf(type = "executive", projectId = "", language = "en", filters = {}){
-      const action = type === "technical" || type === "detailed" ? "detailedreport" : "pdf";
-      return apiCall(action, { projectId, language, filters: encodePayload(filters) }, 120000);
+    async generatePdf(type = "executive", projectId = "", language = "en", filters = {}, options = {}){
+      const action = type === "technical" ? "technicalreport" : (type === "detailed" ? "detailedreport" : "pdf");
+      const params = { projectId, language, filters: encodePayload(filters), options: encodePayload(options) };
+      if (options && options.orientation) params.orientation = options.orientation;
+      if (options && options.paperSize) params.paperSize = options.paperSize;
+      return apiCall(action, params, 120000);
     },
-    async generateInvestmentPack(projectId = "", language = "en", filters = {}){
-      return apiCall("investmentpack", { projectId, language, filters: encodePayload(filters) }, 180000);
+    async generateInvestmentPack(projectId = "", language = "en", filters = {}, options = {}){
+      const params = { projectId, language, filters: encodePayload(filters), options: encodePayload(options) };
+      if (options && options.orientation) params.orientation = options.orientation;
+      if (options && options.paperSize) params.paperSize = options.paperSize;
+      return apiCall("investmentpack", params, 180000);
     },
     async runDiagnostics(){ return apiCall("diagnostics", {}, 60000); },
     async health(){ return apiCall("health", {}, 30000); },
@@ -186,8 +193,8 @@
   window.im3LoadDashboard = window.im3LoadDashboard || ((filters = {}, projectId = "") => window.IM3Api.loadDashboard(filters, projectId));
   window.im3LoadSummaryData = window.im3LoadSummaryData || ((view, filters = {}, projectId = "") => window.IM3Api.loadSummaryData(view, filters, projectId));
   window.im3LoadTimeseries = window.im3LoadTimeseries || ((params = {}) => window.IM3Api.loadTimeseries(params));
-  window.im3GeneratePdf = window.im3GeneratePdf || ((type, projectId, language, filters) => window.IM3Api.generatePdf(type, projectId, language, filters));
-  window.im3GenerateInvestmentPack = window.im3GenerateInvestmentPack || ((projectId, language, filters) => window.IM3Api.generateInvestmentPack(projectId, language, filters));
+  window.im3GeneratePdf = window.im3GeneratePdf || ((type, projectId, language, filters, options) => window.IM3Api.generatePdf(type, projectId, language, filters, options));
+  window.im3GenerateInvestmentPack = window.im3GenerateInvestmentPack || ((projectId, language, filters, options) => window.IM3Api.generateInvestmentPack(projectId, language, filters, options));
   window.im3RunDiagnostics = window.im3RunDiagnostics || (() => window.IM3Api.runDiagnostics());
   window.im3ClearGeneratedReports = window.im3ClearGeneratedReports || (() => ({ cleared:true }));
   window.im3FormatNumber = window.im3FormatNumber || formatNumber;
@@ -201,5 +208,5 @@
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script src="./app.js?v=20260709-responsive-report-fix"></script>
-<script type="text/babel" src="./im3-react.jsx?v=20260709-responsive-report-fix"></script>
+<script src="./app.js?v=20260709-report-branding-fix"></script>
+<script type="text/babel" src="./im3-react.jsx?v=20260709-report-branding-fix"></script>

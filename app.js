@@ -57,7 +57,8 @@
         clearTimeout(timer);
         delete window[cb];
         script.remove();
-        reject(new Error("Failed to reach Apps Script API. Check deployment URL and access permissions."));
+        const size = script.src ? Math.round(script.src.length / 1024) : 0;
+        reject(new Error("Failed to reach Apps Script API for action '" + action + "'. Check deployment URL/access permissions. If this happened while generating a report with charts, the JSONP request may be too large (" + size + " KB)."));
       };
       document.body.appendChild(script);
     });
@@ -133,7 +134,7 @@
       return apiCall("timeseries", params, 60000);
     },
     async generatePdf(type = "executive", projectId = "", language = "en", filters = {}, options = {}){
-      const action = type === "technical" || type === "detailed" ? "detailedreport" : "pdf";
+      const action = type === "technical" ? "technicalreport" : (type === "detailed" ? "detailedreport" : "pdf");
       const params = { projectId, language, filters: encodePayload(filters), options: encodePayload(options) };
       if (options && options.orientation) params.orientation = options.orientation;
       if (options && options.paperSize) params.paperSize = options.paperSize;
@@ -255,6 +256,9 @@ function im3MergeDropdownMaps(...maps) {
     Object.keys(map).forEach(key => {
       const value = map[key];
       if (Array.isArray(value)) merged[key] = value;
+      else if (value && typeof value === "object" && Array.isArray(value.options)) merged[key] = value.options;
+      else if (value && typeof value === "object" && Array.isArray(value.values)) merged[key] = value.values;
+      else if (value && typeof value === "object" && Array.isArray(value.items)) merged[key] = value.items;
     });
   });
   return merged;
@@ -318,7 +322,9 @@ function im3Jsonp(action, params={}, timeoutMs=30000) {
       done=true;
       clearTimeout(timer);
       delete window[cb];
-      reject("Failed to reach Apps Script API. Check deployment URL and access permissions.");
+      script.remove();
+      const size = script.src ? Math.round(script.src.length / 1024) : 0;
+      reject("Failed to reach Apps Script API for action '" + action + "'. Check deployment URL/access permissions. If this happened while generating a report with charts, the JSONP request may be too large (" + size + " KB).");
     };
     document.body.appendChild(script);
   });
@@ -3073,7 +3079,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
 
     async generatePdf(type = "executive", projectId = "", language = "en", filters = {}, options = {}) {
-      const action = type === "technical" || type === "detailed" ? "detailedreport" : "pdf";
+      const action = type === "technical" ? "technicalreport" : (type === "detailed" ? "detailedreport" : "pdf");
       const params = { projectId, language, filters: filtersToParam(filters), options: filtersToParam(options) };
       if (options && options.orientation) params.orientation = options.orientation;
       if (options && options.paperSize) params.paperSize = options.paperSize;
