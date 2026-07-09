@@ -2955,3 +2955,517 @@ html:has(#im3-app), body:has(#im3-app){
   border-color:#31445B;
   color:#F8FBFF;
 }
+
+/* Animated icon system v9.8: one visible icon per slot */
+.im3rx-animated-icon{
+  position:relative;
+  display:inline-grid;
+  place-items:center;
+  width:24px;
+  height:24px;
+  flex:0 0 auto;
+  line-height:0;
+}
+
+.im3rx-animated-icon lord-icon,
+.im3rx-animated-icon img{
+  width:100%!important;
+  height:100%!important;
+  display:block;
+}
+
+.im3rx-animated-icon lord-icon{
+  opacity:.94;
+}
+
+.im3rx-animated-icon img{
+  opacity:.92;
+  transition:opacity .18s ease, transform .18s ease;
+}
+
+.im3rx-kpi-icon img,
+.im3rx-field-label .im3rx-animated-icon img{
+  filter:brightness(0) saturate(100%) invert(20%) sepia(40%) saturate(1147%) hue-rotate(177deg) brightness(88%) contrast(92%);
+}
+
+.im3rx-kpi:hover .im3rx-kpi-icon img,
+.im3rx-field:focus-within .im3rx-field-label .im3rx-animated-icon img{
+  filter:brightness(0) saturate(100%) invert(78%) sepia(67%) saturate(370%) hue-rotate(358deg) brightness(104%) contrast(95%);
+  transform:scale(1.06);
+}
+
+.im3rx-nav button .im3rx-animated-icon lord-icon{
+  opacity:.88;
+}
+
+.im3rx-nav button:not(:hover) .im3rx-animated-icon[data-mode="hover"] lord-icon{
+  opacity:.72;
+}
+
+.im3rx-kpi-icon .im3rx-animated-icon{
+  width:28px;
+  height:28px;
+}
+
+.im3rx-actions button .im3rx-animated-icon,
+.im3rx-icon-text .im3rx-animated-icon{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+}
+
+.im3rx-field-label{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  min-height:22px;
+}
+
+.im3rx-field-label .im3rx-animated-icon{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+}
+
+.im3rx-field-label > span{
+  min-width:0;
+}
+
+.im3rx-empty{
+  gap:10px;
+}
+
+.im3rx-empty .im3rx-animated-icon{
+  width:38px;
+  height:38px;
+  margin:0 auto 2px;
+}
+
+.im3rx-toast{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.im3rx-toast .im3rx-animated-icon{
+  width:24px;
+  height:24px;
+  flex:0 0 24px;
+}
+
+.im3rx-loading .im3rx-animated-icon.state{
+  width:50px;
+  height:50px;
+  margin:0 auto 12px;
+}
+
+.im3rx-loading .im3rx-animated-icon.state img{
+  animation:im3rx-spin 1.1s linear infinite;
+  opacity:.92;
+}
+
+.im3rx-progress:not(.error)::before,
+.im3rx-global-progress:not(.error)::before{
+  content:"";
+  display:inline-block;
+  width:14px;
+  height:14px;
+  margin-right:8px;
+  border:2px solid rgba(31,120,180,.25);
+  border-top-color:var(--im3rx-secondary);
+  border-radius:50%;
+  animation:im3rx-spin .9s linear infinite;
+  vertical-align:-2px;
+}
+
+@keyframes im3rx-spin{
+  to{transform:rotate(360deg)}
+}
+
+/* SVGator-style IM3 logo motion: subtle, only on hover */
+.im3rx-logo{
+  position:relative;
+  overflow:hidden;
+}
+
+.im3rx-logo span{
+  position:relative;
+  z-index:2;
+}
+
+.im3rx-logo::after{
+  content:"";
+  position:absolute;
+  inset:-45% auto -45% -70%;
+  width:55%;
+  transform:rotate(18deg);
+  background:rgba(255,255,255,.42);
+  transition:transform .45s ease;
+}
+
+.im3rx-brand:hover .im3rx-logo::after{
+  transform:translateX(230%) rotate(18deg);
+}
+
+/* Graph Studio night-mode contrast fix */
+.im3rx-app[data-theme="night"] .im3rx-chart-workbench{
+  background:#0F1B2A!important;
+  border-color:#4D6684!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-chart-title strong,
+.im3rx-app[data-theme="night"] .im3rx-picker strong,
+.im3rx-app[data-theme="night"] .im3rx-graph-grid span{
+  color:#F8FBFF!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-picker{
+  background:#101D2D!important;
+  border-color:#536D8D!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-picker button{
+  background:#17283D!important;
+  border-color:#6480A3!important;
+  color:#F8FBFF!important;
+  box-shadow:none!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-picker button:hover{
+  background:#213753!important;
+  border-color:#F9DA7B!important;
+  color:#FFFFFF!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-picker button.active{
+  background:#F9DA7B!important;
+  border-color:#F9DA7B!important;
+  color:#0B2440!important;
+  box-shadow:0 0 0 2px rgba(249,218,123,.22)!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-chart-workbench select,
+.im3rx-app[data-theme="night"] .im3rx-chart-workbench option{
+  background:#0B1624!important;
+  color:#F8FBFF!important;
+  border-color:#6E89AA!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-validation,
+.im3rx-app[data-theme="night"] .im3rx-validation span,
+.im3rx-app[data-theme="night"] .im3rx-validation strong{
+  color:#F9DA7B!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-kpi-icon img,
+.im3rx-app[data-theme="night"] .im3rx-field-label .im3rx-animated-icon img{
+  filter:brightness(0) saturate(100%) invert(88%) sepia(39%) saturate(531%) hue-rotate(354deg) brightness(102%) contrast(95%)!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-field-label,
+.im3rx-app[data-theme="night"] .im3rx-field-label span{
+  color:#F8FBFF!important;
+}
+
+/* Analysis responsiveness + branded icon motion v9.9 */
+.im3rx-analysis-layout{
+  grid-template-columns:minmax(280px,.88fr) minmax(420px,1.42fr)!important;
+  align-items:stretch!important;
+}
+
+.im3rx-analysis-layout > .im3rx-card{
+  min-width:0;
+  height:100%;
+}
+
+.im3rx-analysis-layout .im3rx-card-head{
+  align-items:center;
+}
+
+.im3rx-analysis-layout .im3rx-mini-grid{
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+}
+
+.im3rx-analysis-table-card{
+  overflow:hidden;
+}
+
+.im3rx-analysis-table-card .im3rx-table-wrap{
+  max-width:100%;
+  max-height:min(62vh,640px);
+  margin-top:10px;
+}
+
+.im3rx-refresh-btn{
+  overflow:hidden;
+}
+
+.im3rx-refresh-glyph{
+  position:relative;
+  display:inline-grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+  border-radius:8px;
+  background:linear-gradient(135deg,rgba(249,218,123,.95),rgba(31,120,180,.18));
+  border:1px solid rgba(31,120,180,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.42);
+}
+
+.im3rx-icon-btn .im3rx-refresh-glyph{
+  width:24px;
+  height:24px;
+}
+
+.im3rx-refresh-glyph img{
+  width:20px!important;
+  height:20px!important;
+  filter:none!important;
+}
+
+.im3rx-refresh-btn:hover .im3rx-refresh-glyph img,
+.im3rx-refresh-btn:focus-visible .im3rx-refresh-glyph img{
+  animation:im3rx-refresh-turn .72s cubic-bezier(.22,1,.36,1);
+}
+
+.im3rx-refresh-btn:hover .im3rx-refresh-glyph{
+  border-color:rgba(249,218,123,.82);
+  box-shadow:0 8px 18px rgba(31,120,180,.22), inset 0 1px 0 rgba(255,255,255,.42);
+}
+
+.im3rx-save-glyph{
+  display:inline-grid;
+  place-items:center;
+  width:20px;
+  height:20px;
+  flex:0 0 20px;
+}
+
+.im3rx-save-glyph img{
+  width:18px!important;
+  height:18px!important;
+  animation:im3rx-save-rise 1.05s ease-in-out infinite;
+  filter:none!important;
+}
+
+.im3rx-process-icon{
+  position:relative;
+  display:grid;
+  place-items:center;
+  width:58px;
+  height:58px;
+  margin:0 auto 12px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%,var(--im3rx-surface) 0 47%,transparent 48%),
+    conic-gradient(from 20deg,var(--im3rx-gold),var(--im3rx-secondary),rgba(31,120,180,.16),var(--im3rx-gold));
+  box-shadow:0 12px 28px rgba(25,58,100,.2);
+  animation:im3rx-process-spin 1.45s linear infinite;
+}
+
+.im3rx-process-icon img{
+  position:relative;
+  z-index:2;
+  width:28px;
+  height:28px;
+  filter:none!important;
+  animation:im3rx-process-counter 1.45s linear infinite;
+}
+
+.im3rx-process-icon i,
+.im3rx-process-icon b{
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--im3rx-gold);
+  box-shadow:0 0 0 5px rgba(249,218,123,.18);
+}
+
+.im3rx-process-icon i{
+  top:3px;
+  right:11px;
+}
+
+.im3rx-process-icon b{
+  left:6px;
+  bottom:10px;
+  width:6px;
+  height:6px;
+  background:var(--im3rx-secondary);
+}
+
+.im3rx-process-icon.error{
+  background:
+    radial-gradient(circle at 50% 50%,var(--im3rx-surface) 0 47%,transparent 48%),
+    conic-gradient(from 20deg,var(--im3rx-danger),var(--im3rx-warning),rgba(192,57,43,.18),var(--im3rx-danger));
+}
+
+.im3rx-nav button i{
+  position:relative;
+  overflow:hidden;
+  border-radius:10px;
+}
+
+.im3rx-nav button i:after{
+  content:"";
+  position:absolute;
+  inset:-30%;
+  background:linear-gradient(120deg,transparent,rgba(249,218,123,.34),transparent);
+  transform:translateX(-120%) rotate(18deg);
+  transition:transform .55s ease;
+}
+
+.im3rx-nav button:hover i:after,
+.im3rx-nav button.active i:after{
+  transform:translateX(120%) rotate(18deg);
+}
+
+.im3rx-nav button:hover .im3rx-animated-icon img,
+.im3rx-nav button.active .im3rx-animated-icon img{
+  animation:im3rx-icon-pop .52s cubic-bezier(.22,1,.36,1);
+  filter:drop-shadow(0 6px 10px rgba(249,218,123,.22));
+}
+
+.im3rx-app[data-theme="night"] .im3rx-refresh-glyph{
+  background:linear-gradient(135deg,rgba(249,218,123,.98),rgba(31,120,180,.3));
+  border-color:rgba(249,218,123,.45);
+}
+
+.im3rx-app[data-theme="night"] .im3rx-refresh-btn img,
+.im3rx-app[data-theme="night"] .im3rx-save-glyph img,
+.im3rx-app[data-theme="night"] .im3rx-process-icon img{
+  filter:none!important;
+}
+
+@keyframes im3rx-refresh-turn{
+  0%{transform:rotate(0) scale(1)}
+  58%{transform:rotate(275deg) scale(1.14)}
+  100%{transform:rotate(360deg) scale(1)}
+}
+
+@keyframes im3rx-save-rise{
+  0%,100%{transform:translateY(0);opacity:1}
+  50%{transform:translateY(-4px);opacity:.76}
+}
+
+@keyframes im3rx-process-spin{
+  to{transform:rotate(360deg)}
+}
+
+@keyframes im3rx-process-counter{
+  to{transform:rotate(-360deg)}
+}
+
+@keyframes im3rx-icon-pop{
+  0%{transform:translateY(0) scale(1)}
+  45%{transform:translateY(-3px) scale(1.12)}
+  100%{transform:translateY(0) scale(1)}
+}
+
+@media(max-width:1320px){
+  .im3rx-analysis-layout{
+    grid-template-columns:1fr!important;
+  }
+}
+
+@media(max-width:900px){
+  .im3rx-analysis-layout .im3rx-mini-grid{
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  }
+  .im3rx-analysis-table-card .im3rx-table-wrap{
+    max-height:unset;
+  }
+}
+
+@media(max-width:760px){
+  .im3rx-analysis-layout{
+    gap:14px!important;
+  }
+  .im3rx-analysis-layout .im3rx-card{
+    padding:16px;
+  }
+  .im3rx-analysis-layout .im3rx-card-head{
+    gap:10px;
+  }
+  .im3rx-analysis-layout .im3rx-card-head h2{
+    font-size:21px;
+  }
+  .im3rx-analysis-layout .im3rx-mini-grid{
+    grid-template-columns:1fr;
+  }
+  .im3rx-analysis-table-card .im3rx-table-wrap table{
+    min-width:720px;
+  }
+  .im3rx-refresh-glyph{
+    width:26px;
+    height:26px;
+  }
+}
+
+/* Execution history polish */
+.im3rx-activity .im3rx-activity-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin-bottom:12px!important;
+}
+
+.im3rx-activity .im3rx-activity-actions{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+}
+
+.im3rx-activity .im3rx-activity-actions button{
+  width:auto!important;
+  height:34px!important;
+  min-height:34px!important;
+  border:1px solid var(--im3rx-border)!important;
+  background:var(--im3rx-surface-2)!important;
+  color:var(--im3rx-text)!important;
+  border-radius:6px!important;
+  padding:0 10px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:6px!important;
+  font-weight:800!important;
+}
+
+.im3rx-activity .im3rx-activity-clear img{
+  width:16px!important;
+  height:16px!important;
+}
+
+.im3rx-activity .im3rx-activity-close{
+  width:34px!important;
+  padding:0!important;
+}
+
+.im3rx-activity .im3rx-activity-close img{
+  width:16px!important;
+  height:16px!important;
+}
+
+.im3rx-activity .im3rx-activity-actions button:not(:disabled):hover{
+  border-color:var(--im3rx-secondary)!important;
+  transform:translateY(-1px);
+}
+
+.im3rx-activity .im3rx-activity-actions button:disabled{
+  opacity:.42!important;
+  cursor:not-allowed!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-activity .im3rx-activity-actions button{
+  background:#182638!important;
+  border-color:#405978!important;
+  color:#F8FBFF!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-activity .im3rx-activity-actions img{
+  filter:brightness(0) invert(1)!important;
+}
