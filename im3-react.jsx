@@ -898,7 +898,59 @@ function AppShell({activePage,setActivePage,theme,setTheme,metadata,selectedProj
   return <div className="im3rx-shell"><aside className="im3rx-sidebar"><div className="im3rx-brand-row"><div className="im3rx-brand"><div className="im3rx-logo"><span>IM3</span></div><div><strong>IM3 Framework</strong><span>Investment Decision Platform</span></div></div><button className="im3rx-icon-btn im3rx-bell-btn" title="Notifications" onClick={()=>setActivityOpen(!activityOpen)}><img src={IM3_ACTION_ICONS.bell} alt=""/>{activityLog.length?<em>{activityLog.length}</em>:null}</button><div className="im3rx-clock im3rx-clock-actions"><button className="im3rx-icon-btn im3rx-theme" title={theme==="day"?"Night mode":"Day mode"} onClick={()=>setTheme(theme==="day"?"night":"day")}><img src={theme==="day"?IM3_ACTION_ICONS.moon:IM3_ACTION_ICONS.sun} alt=""/></button><div className="im3rx-clock-text"><strong>{timeParts.pop()||im3xDateTime(now)}</strong><span>{timeParts.join(",")||"Real time"}</span></div><button className="im3rx-icon-btn im3rx-refresh-btn" title="Refresh results" onClick={onRefresh}><span className="im3rx-refresh-glyph"><img src={IM3_ACTION_ICONS.refresh} alt=""/></span></button></div></div><nav className="im3rx-nav">{IM3_NAV.map(item=><button key={item.id} className={activePage===item.id?"active":""} onClick={()=>setActivePage(item.id)}><i><AnimatedIcon kind={item.kind} fallback={item.icon} mode="hover" size={24} forceFallback={true}/></i><span>{item.label}</span></button>)}</nav><div className="im3rx-sidebar-card"><span>Active selection</span><strong>{selectedProject.Project_Name||selectedProject.label||selectedProject.Project_ID||"All projects"}</strong><small>{metadata?.version||"Version unavailable"}</small></div></aside><main className="im3rx-main">{children}</main></div>
 }
 function Header({activePage,projects,selectedProjectIds,setSelectedProjectIds,scenarioOptions,selectedScenarioTypes,setSelectedScenarioTypes,lastLoadedAt,onRefresh}){const title=IM3_NAV.find(n=>n.id===activePage)?.label||"Overview";return <section className="im3rx-header"><div><p>Google Sheets + Apps Script Engine</p><h1>{title}</h1><span>Last data load: {im3xDateTime(lastLoadedAt)}</span></div><div className="im3rx-header-controls"><MultiSelectDropdown label="Projects" options={projects} selected={selectedProjectIds} onChange={setSelectedProjectIds} valueKey="Project_ID" displayKey="Project_Name" allLabel="All projects"/><MultiSelectDropdown label="Scenario type" options={scenarioOptions} selected={selectedScenarioTypes} onChange={setSelectedScenarioTypes} allLabel="All scenarios"/><button className="im3rx-icon-text im3rx-refresh-btn" onClick={onRefresh}><span className="im3rx-refresh-glyph"><img src={IM3_ACTION_ICONS.refresh} alt=""/></span>Reload</button></div></section>}
-function MultiSelectDropdown({label,options,selected,onChange,valueKey,displayKey,allLabel}){const[open,setOpen]=useState(false);const normalized=asArray(options).map((option,idx)=>{const value=option&&typeof option==="object"?String(option[valueKey]??option.value??option.id??option.key??option.label??idx):String(option??idx);const text=option&&typeof option==="object"?im3xCleanLabel(option[displayKey]??option.label??option.name??option.title??option.value??value):im3xCleanLabel(option);return{value,label:text||`${label} ${idx+1}`}}).filter(o=>o.value!=="");const selectedLabels=selected.length?normalized.filter(o=>selected.includes(o.value)).map(o=>o.label).slice(0,2).join(", "):allLabel;function toggle(value){onChange(selected.includes(value)?selected.filter(v=>v!==value):[...selected,value])}return <div className={`im3rx-ms ${open?"open":""}`}><span>{label}</span><button type="button" onClick={()=>setOpen(!open)}><strong>{selectedLabels||allLabel}</strong><small>{selected.length?`${selected.length} selected`:"All"}</small></button>{open&&<div className="im3rx-ms-menu"><label className="im3rx-ms-option"><input type="checkbox" checked={!selected.length} onChange={()=>onChange([])}/><span>{allLabel}</span></label>{normalized.map(o=><label key={o.value} className="im3rx-ms-option"><input type="checkbox" checked={selected.includes(o.value)} onChange={()=>toggle(o.value)}/><span>{o.label}</span></label>)}</div>}</div>}
+function MultiSelectDropdown({label,options,selected,onChange,valueKey,displayKey,allLabel}){
+  const [open,setOpen]=useState(false);
+  const rootRef=useRef(null);
+  const normalized=asArray(options).map((option,idx)=>{
+    const value=option&&typeof option==="object"?String(option[valueKey]??option.value??option.id??option.key??option.label??idx):String(option??idx);
+    const text=option&&typeof option==="object"?im3xCleanLabel(option[displayKey]??option.label??option.name??option.title??option.value??value):im3xCleanLabel(option);
+    return{value,label:text||`${label} ${idx+1}`};
+  }).filter(o=>o.value!=="");
+  const selectedLabels=selected.length?normalized.filter(o=>selected.includes(o.value)).map(o=>o.label).slice(0,2).join(", "):allLabel;
+  const selectedMeta=selected.length?`${selected.length} selected`:"";
+
+  useEffect(()=>{
+    if(!open)return undefined;
+    function handleOutside(event){
+      if(rootRef.current&&!rootRef.current.contains(event.target))setOpen(false);
+    }
+    function handleEscape(event){
+      if(event.key==="Escape")setOpen(false);
+    }
+    document.addEventListener("pointerdown",handleOutside,true);
+    document.addEventListener("keydown",handleEscape,true);
+    return()=>{
+      document.removeEventListener("pointerdown",handleOutside,true);
+      document.removeEventListener("keydown",handleEscape,true);
+    };
+  },[open]);
+
+  function toggle(value){onChange(selected.includes(value)?selected.filter(v=>v!==value):[...selected,value]);}
+  function clearAll(){onChange([]);}
+
+  return <div ref={rootRef} className={`im3rx-ms ${open?"open":""}`}>
+    <span>{label}</span>
+    <button className="im3rx-ms-trigger" type="button" aria-haspopup="listbox" aria-expanded={open} onClick={()=>setOpen(!open)}>
+      <strong>{selectedLabels||allLabel}</strong>
+    </button>
+    {open&&<div className="im3rx-ms-menu" role="listbox" aria-label={label}>
+      <div className="im3rx-ms-menu-head">
+        <strong>{label}</strong>
+        {selectedMeta&&<em>{selectedMeta}</em>}
+      </div>
+      <label className="im3rx-ms-option im3rx-ms-all">
+        <input type="checkbox" checked={!selected.length} onChange={clearAll}/>
+        <span>{allLabel}</span>
+      </label>
+      <div className="im3rx-ms-options-scroll">
+        {normalized.map(o=><label key={o.value} className="im3rx-ms-option">
+          <input type="checkbox" checked={selected.includes(o.value)} onChange={()=>toggle(o.value)}/>
+          <span>{o.label}</span>
+        </label>)}
+      </div>
+    </div>}
+  </div>;
+}
 function OverviewPage({dashboard,summary,summaryViews,summaryView,setSummaryView,diagnostics,onDiagnostics}){const dashSummary=dashboard?.summary||{},first=dashboard?.first||dashboard?.rows?.[0]||{},decision=first.Final_Decision||first.Decision_Label||first.Recommendation||"Review";return <><section className="im3rx-grid im3rx-kpis"><KpiCard label="Rows" value={dashSummary.count??dashboard?.rows?.length??0} hint="Selected output rows"/><KpiCard label="Average NPV" value={window.IM3Api.formatCurrency(dashSummary.avgNPV??first.NPV_USD??first.NPV_Display)} hint="Filtered average"/><KpiCard label="Average IRR" value={window.IM3Api.formatPercent(dashSummary.avgIRR??first.IRR??first.IRR_Display)} hint="Return indicator"/><KpiCard label="MCDA" value={window.IM3Api.formatNumber(dashSummary.avgMCDA??first.MCDA_Score??first.MCDA_Display)} hint="Strategic score"/><KpiCard label="System Dynamics" value={window.IM3Api.formatNumber(dashSummary.avgSD??first.System_Dynamics_Score??first.SD_Display)} hint="Dynamic resilience"/><KpiCard label="Integrated Score" value={window.IM3Api.formatNumber(dashSummary.avgIntegratedScore??first.Integrated_Score)} hint="Final composite score"/><KpiCard label="Best Project" value={dashSummary.bestProject?.Project_Name||first.Project_Name||"-"} hint="By integrated score"/><KpiCard label="Decision" value={decision} hint={first.Risk_Label||first.Scenario_Risk_Class||"Decision state"} tone={statusTone(decision)}/></section><section className="im3rx-two-col"><DataQualityPanel diagnostics={diagnostics} dashboard={dashboard} onDiagnostics={onDiagnostics}/><SummaryViewer summary={summary} summaryViews={summaryViews} summaryView={summaryView} setSummaryView={setSummaryView}/></section></>}
 function KpiCard({label,value,hint,tone="neutral"}){return <article className={`im3rx-kpi ${tone}`}><div className="im3rx-kpi-icon"><AnimatedIcon kind={im3xIconKind(label)} fallback={im3xIcon(label)} mode="gentle" size={26} forceFallback={true}/></div><span>{im3xCleanLabel(label)}</span><strong>{value===undefined||value===null||value===""?"-":value}</strong><small>{im3xCleanLabel(hint||"Model output")||"Model output"}</small><b></b></article>}
 function DataQualityPanel({diagnostics,dashboard,onDiagnostics}){const missingSheets=asArray(diagnostics?.missingSheets),rows=dashboard?.rows||[],warnings=[];if(!rows.length)warnings.push("No dashboard rows returned for the current selection.");if(missingSheets.length)warnings.push(`${missingSheets.length} workbook sheet(s) reported missing.`);if(!diagnostics)warnings.push("Run diagnostics to validate formulas and module availability.");const score=Math.max(0,100-warnings.length*18-missingSheets.length*4);const items=[{ok:rows.length>0,text:"Project data available"},{ok:!missingSheets.length,text:"Workbook modules available"},{ok:true,text:"Dropdown values loaded"},{ok:!!diagnostics,text:"Diagnostics available"}];return <section className="im3rx-card"><div className="im3rx-card-head"><div><p>Data Quality</p><h2>{score}%</h2></div><button onClick={onDiagnostics}>Run diagnostics</button></div><ul className="im3rx-checks enhanced">{items.map((item,idx)=><li key={idx} className={item.ok?"ok":"warn"}><span>{item.text}</span><img src={item.ok ? IM3_ACTION_ICONS.success : IM3_ACTION_ICONS.warning} alt=""/></li>)}</ul>{warnings.length?<div className="im3rx-warning-list">{warnings.map((w,i)=><span key={i}>{w}</span>)}</div>:<p className="im3rx-muted">No critical data quality warnings found.</p>}</section>}

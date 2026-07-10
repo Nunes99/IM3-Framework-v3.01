@@ -5072,3 +5072,281 @@ body{
 #im3-react-root select::-ms-expand{
   display:none;
 }
+
+/* ============================================================
+   IM3 top dropdown refinement v15.0
+   Fixes Project and Scenario Type multiselect rendering on desktop,
+   tablet and mobile. Removes the right-side “All” text from the
+   trigger so it never overlaps the chevron.
+   ============================================================ */
+.im3rx-header-controls{
+  position:relative;
+  z-index:120;
+  overflow:visible!important;
+}
+
+.im3rx-header,
+.im3rx-main,
+.im3rx-shell,
+#im3-react-root,
+#im3-react-root > .im3rx-app{
+  overflow:visible;
+}
+
+.im3rx-main{
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+
+.im3rx-ms{
+  position:relative!important;
+  min-width:clamp(220px, 22vw, 320px);
+  max-width:100%;
+  z-index:1;
+}
+
+.im3rx-ms.open{
+  z-index:5000;
+}
+
+.im3rx-ms > span{
+  display:block;
+  margin-bottom:2px;
+}
+
+.im3rx-ms > button,
+.im3rx-ms > .im3rx-ms-trigger{
+  width:100%!important;
+  height:46px!important;
+  min-height:46px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:0!important;
+  padding:0 42px 0 13px!important;
+  text-align:left!important;
+  line-height:1.15!important;
+}
+
+.im3rx-ms > button strong,
+.im3rx-ms > .im3rx-ms-trigger strong{
+  display:block;
+  width:100%;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:14px!important;
+  font-weight:900!important;
+}
+
+/* Right-side label removed; keep hidden in case older cached JSX is still loaded. */
+.im3rx-ms > button small,
+.im3rx-ms > .im3rx-ms-trigger small{
+  display:none!important;
+}
+
+.im3rx-ms > button::after,
+.im3rx-ms > .im3rx-ms-trigger::after{
+  right:13px!important;
+  width:17px!important;
+  height:17px!important;
+  opacity:.88!important;
+  transition:transform .16s ease, opacity .16s ease;
+}
+
+.im3rx-ms.open > button::after,
+.im3rx-ms.open > .im3rx-ms-trigger::after{
+  transform:translateY(-50%) rotate(180deg)!important;
+  opacity:1!important;
+}
+
+.im3rx-ms-menu{
+  left:0!important;
+  right:auto!important;
+  top:calc(100% + 8px)!important;
+  width:max(100%, 320px)!important;
+  max-width:min(420px, calc(100vw - 32px))!important;
+  max-height:min(360px, 56vh)!important;
+  padding:10px!important;
+  overflow:hidden!important;
+  border-radius:10px!important;
+  box-shadow:0 20px 48px rgba(0,0,0,.20)!important;
+  background:var(--im3rx-surface)!important;
+  border:1px solid var(--im3rx-border)!important;
+}
+
+.im3rx-ms-menu-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:2px 2px 9px;
+  margin-bottom:6px;
+  border-bottom:1px solid var(--im3rx-border);
+}
+
+.im3rx-ms-menu-head strong{
+  font-size:13px;
+  color:var(--im3rx-text);
+}
+
+.im3rx-ms-menu-head em{
+  flex:0 0 auto;
+  font-style:normal;
+  font-size:11px;
+  font-weight:900;
+  color:var(--im3rx-muted);
+  background:var(--im3rx-surface-2);
+  border:1px solid var(--im3rx-border);
+  border-radius:999px;
+  padding:3px 8px;
+}
+
+.im3rx-ms-options-scroll{
+  display:grid;
+  gap:4px;
+  max-height:230px;
+  overflow-y:auto;
+  padding-right:3px;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+
+.im3rx-ms-option{
+  min-height:40px!important;
+  padding:9px 10px!important;
+  border:1px solid transparent;
+  border-radius:7px!important;
+  background:transparent;
+}
+
+.im3rx-ms-option:hover{
+  border-color:var(--im3rx-border);
+}
+
+.im3rx-ms-option input{
+  width:17px!important;
+  height:17px!important;
+  flex:0 0 17px!important;
+}
+
+.im3rx-ms-option span{
+  display:block;
+  min-width:0!important;
+  line-height:1.25!important;
+  overflow-wrap:anywhere!important;
+}
+
+.im3rx-ms-all{
+  margin-bottom:6px;
+  background:var(--im3rx-surface-2)!important;
+  border-color:var(--im3rx-border)!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-ms-menu,
+.im3rx-app[data-theme="night"] .im3rx-ms-menu-head em,
+.im3rx-app[data-theme="night"] .im3rx-ms-all{
+  background:#111D2B!important;
+  border-color:#31445B!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-ms-all,
+.im3rx-app[data-theme="night"] .im3rx-ms-option:hover,
+.im3rx-app[data-theme="night"] .im3rx-ms-menu-head em{
+  background:#182638!important;
+}
+
+/* Header-specific dropdown positioning: avoid viewport overflow on the second dropdown. */
+.im3rx-header-controls .im3rx-ms:nth-of-type(2) .im3rx-ms-menu{
+  left:auto!important;
+  right:0!important;
+}
+
+@media(max-width:1180px){
+  .im3rx-header-controls{
+    align-items:stretch!important;
+  }
+  .im3rx-ms{
+    min-width:min(100%, 250px);
+  }
+  .im3rx-header-controls .im3rx-ms .im3rx-ms-menu{
+    left:0!important;
+    right:auto!important;
+  }
+}
+
+/* Mobile: dropdown curtain becomes part of the natural flow, not an awkward overlay. */
+@media(max-width:760px){
+  .im3rx-header,
+  .im3rx-card,
+  .im3rx-main,
+  .im3rx-shell{
+    overflow:visible!important;
+  }
+  .im3rx-header-controls{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    overflow:visible!important;
+    z-index:200;
+  }
+  .im3rx-ms{
+    width:100%!important;
+    min-width:0!important;
+    z-index:auto;
+  }
+  .im3rx-ms.open{
+    z-index:20;
+  }
+  .im3rx-ms > button,
+  .im3rx-ms > .im3rx-ms-trigger{
+    height:48px!important;
+    min-height:48px!important;
+    padding-left:14px!important;
+    padding-right:44px!important;
+  }
+  .im3rx-ms-menu,
+  .im3rx-header-controls .im3rx-ms:nth-of-type(2) .im3rx-ms-menu{
+    position:relative!important;
+    top:auto!important;
+    left:auto!important;
+    right:auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    max-height:none!important;
+    margin-top:8px!important;
+    margin-bottom:8px!important;
+    box-shadow:0 12px 28px rgba(0,0,0,.14)!important;
+  }
+  .im3rx-ms-options-scroll{
+    max-height:min(300px, 44svh)!important;
+  }
+  @supports (height:100dvh){
+    .im3rx-ms-options-scroll{max-height:min(300px, 44dvh)!important;}
+  }
+  .im3rx-ms-menu-head{
+    position:sticky;
+    top:0;
+    z-index:2;
+    background:var(--im3rx-surface);
+  }
+  .im3rx-app[data-theme="night"] .im3rx-ms-menu-head{
+    background:#111D2B;
+  }
+}
+
+@media(max-width:420px){
+  .im3rx-ms-menu-head{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:6px;
+  }
+  .im3rx-ms-menu-head em{
+    align-self:flex-start;
+  }
+  .im3rx-ms-option{
+    min-height:42px!important;
+  }
+}
