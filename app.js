@@ -114,40 +114,78 @@ function im3SafeDomId(value) {
   return String(value || "").replace(/[^a-zA-Z0-9_-]/g, "_");
 }
 
-function im3Jsonp(action, params={}, timeoutMs=30000) {
+function im3IsSlowMobileNetwork() {
+  const ua = String(navigator.userAgent || navigator.vendor || "").toLowerCase();
+  const mobile = /android|iphone|ipad|ipod|mobile|wv/.test(ua) || (navigator.maxTouchPoints > 1 && /macintosh/.test(ua));
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const effectiveType = String((connection && connection.effectiveType) || "").toLowerCase();
+  return mobile || /slow-2g|2g|3g/.test(effectiveType);
+}
+
+function im3ScaledTimeout(timeoutMs) {
+  const base = Number(timeoutMs) || 45000;
+  if (im3IsSlowMobileNetwork()) return Math.max(base * 2.8, 120000);
+  return Math.max(base * 1.35, 60000);
+}
+
+function im3Sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function im3JsonpOnce(action, params={}, timeoutMs=30000) {
   return new Promise((resolve,reject)=>{
     const cb="im3_cb_"+Math.random().toString(36).slice(2);
     const script=document.createElement("script");
+    const finalTimeout = im3ScaledTimeout(timeoutMs);
     let done=false;
+    const cleanup=()=>{
+      clearTimeout(timer);
+      try{delete window[cb];}catch(e){window[cb]=undefined;}
+      try{script.remove();}catch(e){}
+    };
     const timer=setTimeout(()=>{
       if(done) return;
       done=true;
-      delete window[cb];
-      script.remove();
-      reject("Request timeout: "+action);
-    }, timeoutMs);
+      cleanup();
+      reject("Request timeout after "+Math.round(finalTimeout/1000)+"s: "+action);
+    }, finalTimeout);
 
     window[cb]=(resp)=>{
       if(done) return;
       done=true;
-      clearTimeout(timer);
-      delete window[cb];
-      script.remove();
+      cleanup();
       if(!resp || !resp.ok) reject((resp && resp.error) || "API error");
-      else resolve(resp.data);
+      else resolve(resp.data || resp);
     };
 
     const query=new URLSearchParams({action,callback:cb,_ts:String(Date.now()),...params});
+    script.async=true;
+    script.defer=true;
+    script.referrerPolicy="no-referrer-when-downgrade";
     script.src=IM3_API_URL+"?"+query.toString();
     script.onerror=()=>{
       if(done) return;
       done=true;
-      clearTimeout(timer);
-      delete window[cb];
-      reject("Failed to reach Apps Script API. Check deployment URL and access permissions.");
+      cleanup();
+      reject("Failed to reach Apps Script API. Check deployment URL, access permissions, Android browser network state, or request size.");
     };
-    document.body.appendChild(script);
+    (document.body || document.head || document.documentElement).appendChild(script);
   });
+}
+
+async function im3Jsonp(action, params={}, timeoutMs=30000) {
+  const maxAttempts = im3IsSlowMobileNetwork() ? 3 : 2;
+  let lastError;
+  for (let attempt=1; attempt<=maxAttempts; attempt++) {
+    try {
+      return await im3JsonpOnce(action, {...params, _attempt:String(attempt)}, timeoutMs);
+    } catch(error) {
+      lastError = error;
+      if (attempt >= maxAttempts) break;
+      await im3Sleep(900 + attempt * 900);
+    }
+  }
+  throw lastError || ("Request failed: "+action);
 }
 function im3ShowAlert(msg,type="info") { const el=document.getElementById("im3Alert"); el.textContent=msg; el.className="im3-alert "+type; setTimeout(()=>el.classList.add("hidden"),5000); }
 
@@ -2784,7 +2822,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try { return JSON.stringify(error); } catch (err) { return String(error); }
   }
 
-  function apiCall(action, params = {}, timeoutMs = 45000) {
+  function apiCall(action, params = {}, timeoutMs = 60000) {
     if (typeof im3Jsonp !== "function") {
       return Promise.reject(new Error("IM³ API bridge is not loaded. Check app.js order."));
     }
@@ -2840,45 +2878,45 @@ document.addEventListener("DOMContentLoaded", () => {
     isOutputLikeKey,
 
     async loadMetadata() {
-      try { return await apiCall("metadatafast", {}, 45000); }
-      catch (err) { return apiCall("metadata", {}, 45000); }
+      try { return await apiCall("metadatafast", {}, 90000); }
+      catch (err) { return apiCall("metadata", {}, 120000); }
     },
 
     async loadDropdowns() {
-      try { return await apiCall("dropdowns", { scope:"all" }, 45000); }
-      catch (err) { return apiCall("configoptions", {}, 45000); }
+      try { return await apiCall("dropdowns", { scope:"all" }, 90000); }
+      catch (err) { return apiCall("configoptions", {}, 90000); }
     },
 
     async loadFilterOptions() {
-      return apiCall("filteroptions", {}, 45000);
+      return apiCall("filteroptions", {}, 90000);
     },
 
     async loadProjects() {
-      return apiCall("projects", {}, 45000);
+      return apiCall("projects", {}, 90000);
     },
 
     async loadModule(moduleId, filters = {}, key = "") {
       const params = { moduleId, filters: filtersToParam(filters) };
       if (key) { params.key = key; params.rowId = key; }
-      return apiCall("module", params, 45000);
+      return apiCall("module", params, 90000);
     },
 
     async manualSave(moduleId, payload = {}, key = "") {
       const params = { moduleId, payload: filtersToParam(payload) };
       if (key) { params.key = key; params.rowId = key; }
-      return apiCall("manualsave", params, 70000);
+      return apiCall("manualsave", params, 120000);
     },
 
     async loadDashboard(filters = {}, projectId = "") {
       const params = { filters: filtersToParam(filters) };
       if (projectId) params.projectId = projectId;
-      return apiCall("dashboard", params, 45000);
+      return apiCall("dashboard", params, 90000);
     },
 
     async loadSummaryData(view = "production_summary", filters = {}, projectId = "") {
       const params = { view, filters: filtersToParam(filters) };
       if (projectId) params.projectId = projectId;
-      return apiCall("summarydata", params, 45000);
+      return apiCall("summarydata", params, 90000);
     },
 
     async loadTimeseries({ metrics = [], filters = {}, projectId = "", startYear = "", endYear = "", groupBy = "Project_Name" } = {}) {
@@ -2890,7 +2928,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (projectId) params.projectId = projectId;
       if (startYear) params.startYear = startYear;
       if (endYear) params.endYear = endYear;
-      return apiCall("timeseries", params, 60000);
+      return apiCall("timeseries", params, 120000);
     },
 
     async generatePdf(type = "executive", projectId = "", language = "en", filters = {}) {
@@ -2903,15 +2941,15 @@ document.addEventListener("DOMContentLoaded", () => {
     },
 
     async runDiagnostics() {
-      return apiCall("diagnostics", {}, 60000);
+      return apiCall("diagnostics", {}, 90000);
     },
 
     async health() {
-      return apiCall("health", {}, 30000);
+      return apiCall("health", {}, 60000);
     },
 
     async clearCache() {
-      return apiCall("clearcache", {}, 30000);
+      return apiCall("clearcache", {}, 60000);
     },
 
     buildProjectFilter: selectedProjectFilter
