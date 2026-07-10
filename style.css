@@ -6109,3 +6109,50 @@ body{
   }
 }
 /* --- end IM3 Dropdown + viewport stability v17.0 --- */
+
+/* ============================================================
+   IM3 mobile dropdown column fix v18.0
+   Projects and Scenario type become one column on mobile.
+   Keeps tablet/desktop side-by-side and prevents viewport overflow.
+   ============================================================ */
+@media (max-width: 520px){
+  .im3rx-header-controls{
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+  }
+
+  .im3rx-header-controls > .im3rx-ms,
+  .im3rx-header-controls > .im3rx-icon-text,
+  .im3rx-header-controls > button{
+    grid-column: auto !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .im3rx-header-controls > .im3rx-ms{
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .im3rx-header-controls .im3rx-ms > .im3rx-ms-trigger,
+  .im3rx-header-controls .im3rx-ms > button{
+    width: 100% !important;
+    justify-content: flex-start !important;
+    padding-right: 42px !important;
+  }
+
+  .im3rx-header-controls .im3rx-ms > .im3rx-ms-trigger strong,
+  .im3rx-header-controls .im3rx-ms > button strong{
+    max-width: calc(100% - 10px) !important;
+  }
+
+  .im3rx-header-controls .im3rx-ms-menu{
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    left: auto !important;
+    right: auto !important;
+  }
+}
+/* --- end IM3 mobile dropdown column fix v18.0 --- */
