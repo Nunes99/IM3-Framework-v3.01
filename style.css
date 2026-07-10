@@ -5656,3 +5656,456 @@ body{
   }
 }
 /* --- end IM3 Dropdown Curtain Unification v16.0 --- */
+
+/* ============================================================
+   IM3 Dropdown + viewport stability v17.0
+   Goal: keep top filters compact/side-by-side, align all curtains left,
+   and prevent horizontal overflow on phones, tablets, iPadOS and desktop.
+   ============================================================ */
+html,
+body{
+  max-width:100%;
+  overflow-x:hidden!important;
+}
+
+#im3-react-root,
+#im3-react-root *,
+#im3-react-root *::before,
+#im3-react-root *::after{
+  box-sizing:border-box;
+}
+
+#im3-react-root{
+  width:100%!important;
+  max-width:100vw!important;
+  min-width:0!important;
+  overflow-x:hidden!important;
+  padding:clamp(8px,1.2vw,18px)!important;
+}
+
+#im3-react-root > .im3rx-app,
+.im3rx-shell,
+.im3rx-main,
+.im3rx-header,
+.im3rx-card,
+.im3rx-card-head,
+.im3rx-header-controls,
+.im3rx-actions,
+.im3rx-graph-grid,
+.im3rx-report-layout,
+.im3rx-report-options,
+.im3rx-form-grid,
+.im3rx-two-col,
+.im3rx-dual-charts,
+.im3rx-chart-workbench,
+.im3rx-chart-box,
+.im3rx-table-wrap,
+.im3rx-picker{
+  min-width:0!important;
+  max-width:100%!important;
+}
+
+.im3rx-shell{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+}
+
+/* Header filters: compact, side-by-side and visually aligned with platform standard. */
+.im3rx-header{
+  align-items:stretch!important;
+}
+
+.im3rx-header-controls{
+  display:grid!important;
+  grid-template-columns:minmax(180px,260px) minmax(180px,260px) auto!important;
+  align-items:end!important;
+  justify-content:end!important;
+  column-gap:10px!important;
+  row-gap:10px!important;
+  flex:0 1 auto!important;
+  width:auto!important;
+  max-width:100%!important;
+}
+
+.im3rx-header-controls > .im3rx-ms{
+  width:100%!important;
+  min-width:0!important;
+  max-width:260px!important;
+}
+
+.im3rx-header-controls > .im3rx-icon-text,
+.im3rx-header-controls > button{
+  height:44px!important;
+  min-height:44px!important;
+  width:auto!important;
+  min-width:104px!important;
+  max-width:140px!important;
+  padding:0 13px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  white-space:nowrap!important;
+}
+
+/* Dropdown trigger standardization. Keep arrow visible without making the control too large. */
+.im3rx-ms,
+.im3rx-selectdd,
+.im3rx-field-selectdd{
+  min-width:0!important;
+  max-width:100%!important;
+}
+
+.im3rx-ms > .im3rx-ms-trigger,
+.im3rx-ms > button{
+  width:100%!important;
+  height:44px!important;
+  min-height:44px!important;
+  max-height:44px!important;
+  padding:0 42px 0 12px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:10px!important;
+  text-align:left!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+}
+
+.im3rx-header-controls .im3rx-ms > .im3rx-ms-trigger,
+.im3rx-header-controls .im3rx-ms > button{
+  height:44px!important;
+  min-height:44px!important;
+  padding-left:12px!important;
+  padding-right:44px!important; /* small but clear separation between text and chevron */
+}
+
+.im3rx-ms > .im3rx-ms-trigger strong,
+.im3rx-ms > button strong{
+  display:block!important;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  text-align:left!important;
+  line-height:1.2!important;
+}
+
+.im3rx-ms > .im3rx-ms-trigger::after,
+.im3rx-ms > button::after{
+  right:13px!important;
+  width:16px!important;
+  height:16px!important;
+  background-size:16px 16px!important;
+}
+
+.im3rx-header-controls .im3rx-ms > .im3rx-ms-trigger::after,
+.im3rx-header-controls .im3rx-ms > button::after{
+  right:14px!important;
+}
+
+/* All dropdown curtains: same left-aligned list behavior, with safe viewport boundaries. */
+.im3rx-ms-menu{
+  text-align:left!important;
+  width:max(100%, 286px)!important;
+  min-width:min(286px, calc(100vw - 28px))!important;
+  max-width:min(420px, calc(100vw - 28px))!important;
+  left:0!important;
+  right:auto!important;
+  top:calc(100% + 6px)!important;
+  overflow:hidden!important;
+  padding:9px!important;
+}
+
+.im3rx-header-controls .im3rx-ms:nth-child(2) .im3rx-ms-menu,
+.im3rx-card-head > .im3rx-ms .im3rx-ms-menu,
+.im3rx-graph-grid > .im3rx-ms:nth-child(2) .im3rx-ms-menu,
+.im3rx-report-options > .im3rx-ms:nth-child(2) .im3rx-ms-menu{
+  left:auto!important;
+  right:0!important; /* keep within viewport on right-side controls */
+  text-align:left!important;
+}
+
+.im3rx-ms-menu-head{
+  justify-content:flex-start!important;
+  align-items:flex-start!important;
+  text-align:left!important;
+}
+
+.im3rx-ms-menu-head strong,
+.im3rx-ms-menu-head em{
+  text-align:left!important;
+}
+
+.im3rx-ms-menu-head em{
+  margin-left:auto!important;
+  white-space:nowrap!important;
+  color:var(--im3rx-muted)!important;
+}
+
+.im3rx-ms-options-scroll{
+  justify-items:stretch!important;
+  align-items:stretch!important;
+  text-align:left!important;
+  max-width:100%!important;
+}
+
+.im3rx-ms-option,
+.im3rx-single-option,
+.im3rx-ms-all{
+  width:100%!important;
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  text-align:left!important;
+  gap:9px!important;
+}
+
+.im3rx-ms-option span,
+.im3rx-single-option span,
+.im3rx-ms-all span{
+  display:block!important;
+  min-width:0!important;
+  flex:1 1 auto!important;
+  text-align:left!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.im3rx-ms-option input,
+.im3rx-single-option::before{
+  flex:0 0 auto!important;
+}
+
+/* Keep every card/table/chart inside the visible area. */
+.im3rx-table-wrap,
+.im3rx-picker,
+.im3rx-chart-box,
+.im3rx-json,
+.im3rx-activity{
+  overflow-x:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+
+.im3rx-card button,
+.im3rx-header button,
+.im3rx-actions button{
+  max-width:100%!important;
+}
+
+.im3rx-card button img,
+.im3rx-header button img,
+.im3rx-icon-text img,
+.im3rx-actions button img{
+  width:17px!important;
+  height:17px!important;
+  flex:0 0 17px!important;
+  margin:0!important;
+}
+
+.im3rx-card button,
+.im3rx-header button,
+.im3rx-actions button,
+.im3rx-icon-text{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+}
+
+/* Tablet landscape: keep compact side-by-side top filters. */
+@media (min-width:901px) and (max-width:1180px){
+  #im3-react-root{
+    padding:10px!important;
+  }
+  .im3rx-header{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,620px)!important;
+    gap:14px!important;
+  }
+  .im3rx-header-controls{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto!important;
+    width:100%!important;
+    justify-content:stretch!important;
+  }
+  .im3rx-header-controls > .im3rx-ms{
+    max-width:none!important;
+  }
+  .im3rx-header h1{
+    font-size:clamp(26px,3vw,32px)!important;
+  }
+}
+
+/* Tablet portrait and large mobile: Projects and Scenario stay side-by-side; reload moves below if needed. */
+@media (min-width:521px) and (max-width:900px){
+  #im3-react-root{
+    padding:8px!important;
+  }
+  .im3rx-header{
+    padding:16px!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:14px!important;
+  }
+  .im3rx-header-controls{
+    width:100%!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(104px,auto)!important;
+    justify-content:stretch!important;
+  }
+  .im3rx-header-controls > .im3rx-ms{
+    max-width:none!important;
+  }
+  .im3rx-header h1{
+    font-size:clamp(24px,4vw,30px)!important;
+  }
+  .im3rx-ms-menu,
+  .im3rx-card-head > .im3rx-ms .im3rx-ms-menu,
+  .im3rx-graph-grid > .im3rx-ms:nth-child(2) .im3rx-ms-menu,
+  .im3rx-report-options > .im3rx-ms:nth-child(2) .im3rx-ms-menu,
+  .im3rx-header-controls .im3rx-ms:nth-child(2) .im3rx-ms-menu{
+    position:absolute!important;
+    width:100%!important;
+    min-width:100%!important;
+    max-width:calc(100vw - 24px)!important;
+    left:0!important;
+    right:auto!important;
+  }
+}
+
+/* Phones: no fixed lower blocks; all controls remain visible and contained. */
+@media (max-width:520px){
+  html, body{
+    overflow-x:hidden!important;
+  }
+  #im3-react-root{
+    padding:0!important;
+    width:100vw!important;
+    max-width:100vw!important;
+  }
+  .im3rx-shell{
+    width:100vw!important;
+    max-width:100vw!important;
+    border-radius:0!important;
+    border-left:0!important;
+    border-right:0!important;
+  }
+  .im3rx-main{
+    padding:10px!important;
+    width:100%!important;
+    overflow-x:hidden!important;
+  }
+  .im3rx-header,
+  .im3rx-card{
+    padding:13px!important;
+    margin-bottom:12px!important;
+  }
+  .im3rx-header h1{
+    font-size:24px!important;
+    line-height:1.05!important;
+  }
+  .im3rx-header-controls{
+    width:100%!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:8px!important;
+  }
+  .im3rx-header-controls > .im3rx-ms{
+    max-width:none!important;
+  }
+  .im3rx-header-controls > .im3rx-ms > span{
+    font-size:11px!important;
+  }
+  .im3rx-header-controls > .im3rx-icon-text,
+  .im3rx-header-controls > button{
+    grid-column:1 / -1!important;
+    width:100%!important;
+    max-width:none!important;
+    height:42px!important;
+    min-height:42px!important;
+  }
+  .im3rx-ms > .im3rx-ms-trigger,
+  .im3rx-ms > button,
+  .im3rx-header-controls .im3rx-ms > .im3rx-ms-trigger,
+  .im3rx-header-controls .im3rx-ms > button{
+    height:43px!important;
+    min-height:43px!important;
+    max-height:43px!important;
+    padding-left:10px!important;
+    padding-right:36px!important;
+    font-size:13px!important;
+  }
+  .im3rx-ms > .im3rx-ms-trigger::after,
+  .im3rx-ms > button::after,
+  .im3rx-header-controls .im3rx-ms > .im3rx-ms-trigger::after,
+  .im3rx-header-controls .im3rx-ms > button::after{
+    right:10px!important;
+    width:15px!important;
+    height:15px!important;
+    background-size:15px 15px!important;
+  }
+  .im3rx-ms-menu,
+  .im3rx-card-head > .im3rx-ms .im3rx-ms-menu,
+  .im3rx-graph-grid > .im3rx-ms:nth-child(2) .im3rx-ms-menu,
+  .im3rx-report-options > .im3rx-ms:nth-child(2) .im3rx-ms-menu,
+  .im3rx-header-controls .im3rx-ms:nth-child(2) .im3rx-ms-menu{
+    position:relative!important;
+    top:auto!important;
+    left:auto!important;
+    right:auto!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    max-height:none!important;
+    margin-top:7px!important;
+    margin-bottom:7px!important;
+    box-shadow:0 10px 24px rgba(0,0,0,.14)!important;
+  }
+  .im3rx-ms-options-scroll{
+    max-height:min(290px,44svh)!important;
+  }
+  @supports (height:100dvh){
+    .im3rx-ms-options-scroll{max-height:min(290px,44dvh)!important;}
+  }
+  .im3rx-ms-menu-head{
+    flex-direction:row!important;
+    align-items:center!important;
+  }
+  .im3rx-ms-menu-head strong{
+    font-size:13px!important;
+  }
+  .im3rx-ms-menu-head em{
+    font-size:11px!important;
+  }
+  .im3rx-single-option,
+  .im3rx-ms-option,
+  .im3rx-ms-all{
+    min-height:38px!important;
+    padding:8px 9px!important;
+    font-size:13px!important;
+  }
+  .im3rx-kpis,
+  .im3rx-mini-grid,
+  .im3rx-form-grid,
+  .im3rx-graph-grid,
+  .im3rx-dual-charts,
+  .im3rx-report-layout,
+  .im3rx-two-col{
+    grid-template-columns:1fr!important;
+  }
+}
+
+/* Very narrow devices: dropdown labels remain readable and never overflow. */
+@media (max-width:360px){
+  .im3rx-header-controls{
+    grid-template-columns:1fr!important;
+  }
+  .im3rx-header-controls > .im3rx-icon-text,
+  .im3rx-header-controls > button{
+    grid-column:auto!important;
+  }
+}
+/* --- end IM3 Dropdown + viewport stability v17.0 --- */
