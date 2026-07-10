@@ -5350,3 +5350,309 @@ body{
     min-height:42px!important;
   }
 }
+
+/* ============================================================
+   IM3 Dropdown Curtain Unification v16.0
+   All custom dropdowns now reuse the Projects / Scenario type
+   curtain behavior. Native selects remain hidden only where the
+   React custom dropdown has replaced them.
+   ============================================================ */
+#im3-react-root{
+  --im3rx-dd-arrow-gap:56px;
+  --im3rx-dd-arrow-right:18px;
+}
+
+.im3rx-card,
+.im3rx-card-head,
+.im3rx-header,
+.im3rx-header-controls,
+.im3rx-actions,
+.im3rx-form-grid,
+.im3rx-graph-grid,
+.im3rx-report-options,
+.im3rx-report-layout,
+.im3rx-chart-workbench,
+.im3rx-main,
+.im3rx-shell{
+  overflow:visible!important;
+}
+
+.im3rx-ms,
+.im3rx-selectdd,
+.im3rx-field-selectdd{
+  position:relative!important;
+  width:100%;
+  min-width:min(240px,100%);
+  max-width:100%;
+}
+
+.im3rx-card-head > .im3rx-ms,
+.im3rx-actions > .im3rx-ms,
+.im3rx-graph-grid > .im3rx-ms,
+.im3rx-report-options > .im3rx-ms{
+  min-width:clamp(220px, 22vw, 340px);
+}
+
+.im3rx-field .im3rx-field-selectdd{
+  min-width:0!important;
+}
+
+.im3rx-ms.open,
+.im3rx-selectdd.open,
+.im3rx-field-selectdd.open{
+  z-index:7000!important;
+}
+
+.im3rx-ms > .im3rx-ms-trigger,
+.im3rx-ms > button{
+  position:relative!important;
+  width:100%!important;
+  min-height:46px!important;
+  height:46px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  text-align:left!important;
+  gap:0!important;
+  padding:0 var(--im3rx-dd-arrow-gap) 0 14px!important;
+  border-radius:6px!important;
+}
+
+.im3rx-ms > .im3rx-ms-trigger strong,
+.im3rx-ms > button strong{
+  display:block!important;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  line-height:1.2!important;
+}
+
+.im3rx-ms > .im3rx-ms-trigger::after,
+.im3rx-ms > button::after{
+  content:""!important;
+  position:absolute!important;
+  right:var(--im3rx-dd-arrow-right)!important;
+  top:50%!important;
+  width:18px!important;
+  height:18px!important;
+  transform:translateY(-50%)!important;
+  pointer-events:none!important;
+  background-image:var(--im3rx-select-arrow-light)!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  background-size:18px 18px!important;
+  opacity:.95!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-ms > .im3rx-ms-trigger::after,
+.im3rx-app[data-theme="night"] .im3rx-ms > button::after{
+  background-image:var(--im3rx-select-arrow-dark)!important;
+}
+
+.im3rx-ms.open > .im3rx-ms-trigger::after,
+.im3rx-ms.open > button::after{
+  transform:translateY(-50%) rotate(180deg)!important;
+}
+
+.im3rx-ms-menu{
+  position:absolute!important;
+  top:calc(100% + 8px)!important;
+  left:0!important;
+  right:auto!important;
+  width:max(100%, 320px)!important;
+  max-width:min(440px, calc(100vw - 32px))!important;
+  max-height:min(380px, 58vh)!important;
+  display:block!important;
+  padding:10px!important;
+  overflow:hidden!important;
+  border-radius:10px!important;
+  background:var(--im3rx-surface)!important;
+  border:1px solid var(--im3rx-border)!important;
+  box-shadow:0 20px 48px rgba(0,0,0,.20)!important;
+}
+
+.im3rx-card-head > .im3rx-ms .im3rx-ms-menu,
+.im3rx-graph-grid > .im3rx-ms:nth-child(2) .im3rx-ms-menu,
+.im3rx-report-options > .im3rx-ms:nth-child(2) .im3rx-ms-menu,
+.im3rx-header-controls .im3rx-ms:nth-of-type(2) .im3rx-ms-menu{
+  left:auto!important;
+  right:0!important;
+}
+
+.im3rx-ms-menu-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  padding:2px 2px 9px!important;
+  margin-bottom:6px!important;
+  border-bottom:1px solid var(--im3rx-border)!important;
+}
+
+.im3rx-ms-menu-head strong{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+.im3rx-ms-options-scroll{
+  display:grid!important;
+  gap:4px!important;
+  max-height:246px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding-right:3px!important;
+  overscroll-behavior:contain!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+
+.im3rx-single-option{
+  width:100%!important;
+  min-height:40px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:9px!important;
+  padding:9px 10px!important;
+  border:1px solid transparent!important;
+  border-radius:7px!important;
+  background:transparent!important;
+  color:var(--im3rx-text)!important;
+  text-align:left!important;
+  font:700 13px 'PT Sans',Arial,sans-serif!important;
+  cursor:pointer!important;
+}
+
+.im3rx-single-option::before{
+  content:"";
+  width:16px;
+  height:16px;
+  flex:0 0 16px;
+  border:1.5px solid var(--im3rx-border);
+  border-radius:50%;
+  background:var(--im3rx-surface);
+}
+
+.im3rx-single-option.active,
+.im3rx-single-option:hover{
+  border-color:var(--im3rx-border)!important;
+  background:var(--im3rx-surface-2)!important;
+}
+
+.im3rx-single-option.active::before{
+  border-color:var(--im3rx-secondary);
+  background:radial-gradient(circle, var(--im3rx-secondary) 0 42%, transparent 45%);
+}
+
+.im3rx-single-option span{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  line-height:1.25!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-ms-menu,
+.im3rx-app[data-theme="night"] .im3rx-single-option::before{
+  background:#111D2B!important;
+  border-color:#31445B!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-single-option.active,
+.im3rx-app[data-theme="night"] .im3rx-single-option:hover{
+  background:#182638!important;
+  border-color:#31445B!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-single-option.active::before{
+  border-color:var(--im3rx-gold)!important;
+  background:radial-gradient(circle, var(--im3rx-gold) 0 42%, transparent 45%)!important;
+}
+
+@media(max-width:1180px){
+  .im3rx-card-head > .im3rx-ms,
+  .im3rx-actions > .im3rx-ms,
+  .im3rx-graph-grid > .im3rx-ms,
+  .im3rx-report-options > .im3rx-ms{
+    min-width:min(100%, 260px)!important;
+  }
+  .im3rx-ms-menu,
+  .im3rx-card-head > .im3rx-ms .im3rx-ms-menu,
+  .im3rx-header-controls .im3rx-ms:nth-of-type(2) .im3rx-ms-menu{
+    left:0!important;
+    right:auto!important;
+  }
+}
+
+@media(max-width:760px){
+  #im3-react-root{
+    overflow:visible!important;
+  }
+  .im3rx-ms,
+  .im3rx-selectdd,
+  .im3rx-field-selectdd,
+  .im3rx-card-head > .im3rx-ms,
+  .im3rx-actions > .im3rx-ms,
+  .im3rx-graph-grid > .im3rx-ms,
+  .im3rx-report-options > .im3rx-ms{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+  .im3rx-ms > .im3rx-ms-trigger,
+  .im3rx-ms > button{
+    height:48px!important;
+    min-height:48px!important;
+    padding-left:14px!important;
+    padding-right:58px!important;
+  }
+  .im3rx-ms > .im3rx-ms-trigger::after,
+  .im3rx-ms > button::after{
+    right:18px!important;
+  }
+  .im3rx-ms-menu,
+  .im3rx-card-head > .im3rx-ms .im3rx-ms-menu,
+  .im3rx-graph-grid > .im3rx-ms:nth-child(2) .im3rx-ms-menu,
+  .im3rx-report-options > .im3rx-ms:nth-child(2) .im3rx-ms-menu,
+  .im3rx-header-controls .im3rx-ms:nth-of-type(2) .im3rx-ms-menu{
+    position:relative!important;
+    top:auto!important;
+    left:auto!important;
+    right:auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    max-height:none!important;
+    margin-top:8px!important;
+    margin-bottom:8px!important;
+    box-shadow:0 12px 28px rgba(0,0,0,.14)!important;
+  }
+  .im3rx-ms-options-scroll{
+    max-height:min(310px, 46svh)!important;
+  }
+  @supports (height:100dvh){
+    .im3rx-ms-options-scroll{max-height:min(310px, 46dvh)!important;}
+  }
+  .im3rx-ms-menu-head{
+    position:sticky!important;
+    top:0!important;
+    z-index:2!important;
+    background:var(--im3rx-surface)!important;
+  }
+  .im3rx-app[data-theme="night"] .im3rx-ms-menu-head{
+    background:#111D2B!important;
+  }
+}
+
+@media(max-width:420px){
+  .im3rx-ms-menu-head{
+    align-items:flex-start!important;
+    flex-direction:column!important;
+  }
+  .im3rx-single-option span{
+    white-space:normal!important;
+  }
+}
+/* --- end IM3 Dropdown Curtain Unification v16.0 --- */
