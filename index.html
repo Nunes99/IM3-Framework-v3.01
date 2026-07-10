@@ -1,23 +1,14 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#113F67">
-  <title>IM3 Framework</title>
-</head>
-<body>
 <!--
-  IM³ Framework — React UI Shell v10.0
+  IM³ Framework — React UI Shell v14.0
   Tilda-safe static frontend. Calculations remain in Google Sheets + Apps Script.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./style.css?v=20260709-mobile-nav-v13">
+  <link rel="stylesheet" href="./style.css?v=20260710-dropdown-mobile-refine-v14">
 
 <div id="im3-react-root">
-  <div class="im3rx-loading">
+  <div class="im3rx-loading im3rx-initial-loading">
     <div></div>
     <strong>Starting IM³ React interface...</strong>
     <p>Preparing scripts and connecting the visual shell.</p>
@@ -36,7 +27,7 @@
 <script>
   window.IM3_USE_REACT_SHELL = true;
   window.IM3_API_URL = "https://script.google.com/macros/s/AKfycbxb6kOjfBkquGrc65P_28GRxL-ad_uzo9mcV7ZHhudO8YMdzBjXmfxNss_yFjPIZKHJ/exec";
-  window.IM3_ICON_MODE = "inline-static";
+  window.IM3_ICON_MODE = "icons8-static";
 </script>
 <script>
 
@@ -218,8 +209,5 @@
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script src="./app.js?v=20260709-mobile-nav-v13"></script>
-<script type="text/babel" src="./im3-react.jsx?v=20260709-mobile-nav-v13"></script>
-
-</body>
-</html>
+<script src="./app.js?v=20260710-dropdown-mobile-refine-v14"></script>
+<script type="text/babel" src="./im3-react.jsx?v=20260710-dropdown-mobile-refine-v14"></script>

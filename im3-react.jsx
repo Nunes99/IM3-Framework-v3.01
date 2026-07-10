@@ -800,7 +800,7 @@ function AdministrationPage({ metadata, diagnostics, onDiagnostics, notify }) {
 
 function LoadingState({ text, compact, progress }) {
   const pct = Math.max(0, Math.min(100, Number(progress?.pct || 0)));
-  return <div className={compact ? "im3rx-loading compact" : "im3rx-loading"}><span className={`im3rx-process-icon ${progress?.error ? "error" : ""}`}><img src={progress?.error?IM3_ACTION_ICONS.warning:IM3_ACTION_ICONS.loader} alt=""/><i></i><b></b></span><strong>{progress?.text || text}</strong>{progress?.detail && <p>{progress.detail}</p>}{progress && <div className={`im3rx-load-meter ${progress?.error ? "error" : ""}`}><span style={{width:pct + "%"}}></span></div>}{progress && <small>{pct}%{progress?.elapsed !== undefined ? ` | elapsed ${progress.elapsed}s` : ""}{progress?.remaining ? ` | about ${progress.remaining}s left` : ""}</small>}{progress?.warning && <em>{progress.warning}</em>}</div>;
+  return <div className={compact ? "im3rx-loading compact" : "im3rx-loading im3rx-initial-loading"}><span className={`im3rx-process-icon ${progress?.error ? "error" : ""}`}><img src={progress?.error?IM3_ACTION_ICONS.warning:IM3_ACTION_ICONS.loader} alt=""/><i></i><b></b></span><strong>{progress?.text || text}</strong>{progress?.detail && <p>{progress.detail}</p>}{progress && <div className={`im3rx-load-meter ${progress?.error ? "error" : ""}`}><span style={{width:pct + "%"}}></span></div>}{progress && <small>{pct}%{progress?.elapsed !== undefined ? ` | elapsed ${progress.elapsed}s` : ""}{progress?.remaining ? ` | about ${progress.remaining}s left` : ""}</small>}{progress?.warning && <em>{progress.warning}</em>}</div>;
 }
 
 function SetupError({ message, progress }) {
