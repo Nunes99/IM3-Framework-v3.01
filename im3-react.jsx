@@ -984,15 +984,18 @@ function MultiSelectDropdown({label,options,selected,onChange,valueKey,displayKe
         <strong>{label}</strong>
         {selectedMeta&&<em>{selectedMeta}</em>}
       </div>
-      <label className="im3rx-ms-option im3rx-ms-all">
+      <label className={`im3rx-ms-option im3rx-ms-all ${!selected.length ? "selected" : ""}`}>
         <input type="checkbox" checked={!selected.length} onChange={clearAll}/>
         <span>{allLabel}</span>
       </label>
       <div className="im3rx-ms-options-scroll">
-        {normalized.map(o=><label key={o.value} className="im3rx-ms-option">
-          <input type="checkbox" checked={selected.includes(o.value)} onChange={()=>toggle(o.value)}/>
-          <span>{o.label}</span>
-        </label>)}
+        {normalized.map(o=>{
+          const checked = selected.includes(o.value);
+          return <label key={o.value} className={`im3rx-ms-option ${checked ? "selected" : ""}`}>
+            <input type="checkbox" checked={checked} onChange={()=>toggle(o.value)}/>
+            <span>{o.label}</span>
+          </label>;
+        })}
       </div>
     </div>}
   </div>;

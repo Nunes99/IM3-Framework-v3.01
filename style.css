@@ -8039,3 +8039,134 @@ body{
   }
 }
 /* --- end IM3 v26.0 top dropdowns reverted to v19 behavior --- */
+
+/* ============================================================
+   IM3 v27.0 — Clean checkbox restoration for top filters
+   Scope: Projects and Scenario type only. No new JS component.
+   Restores the left selection square and compacts option spacing.
+   ============================================================ */
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-menu{
+  padding:7px!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-menu-head{
+  padding:0 2px 6px!important;
+  margin:0!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-options-scroll{
+  gap:2px!important;
+  padding-right:2px!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all{
+  position:relative!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:9px!important;
+  width:100%!important;
+  min-height:30px!important;
+  padding:5px 7px!important;
+  margin:0!important;
+  border-radius:4px!important;
+  line-height:1.2!important;
+  text-align:left!important;
+  box-sizing:border-box!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option + .im3rx-ms-option,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all + .im3rx-ms-options-scroll{
+  margin-top:2px!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option input,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all input{
+  position:absolute!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  width:1px!important;
+  height:1px!important;
+  margin:0!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option::before,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all::before{
+  content:""!important;
+  width:15px!important;
+  height:15px!important;
+  flex:0 0 15px!important;
+  border:1.5px solid var(--im3rx-secondary)!important;
+  border-radius:3px!important;
+  background:var(--im3rx-surface)!important;
+  box-sizing:border-box!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option.selected::before,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all.selected::before{
+  background:var(--im3rx-gold)!important;
+  border-color:var(--im3rx-gold)!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option.selected::after,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all.selected::after{
+  content:""!important;
+  position:absolute!important;
+  left:11px!important;
+  top:50%!important;
+  width:7px!important;
+  height:4px!important;
+  border-left:2px solid var(--im3rx-primary)!important;
+  border-bottom:2px solid var(--im3rx-primary)!important;
+  transform:translateY(-68%) rotate(-45deg)!important;
+  pointer-events:none!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option span,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all span{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:13px!important;
+  line-height:1.2!important;
+  text-align:left!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option:hover,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all:hover{
+  background:var(--im3rx-surface-2)!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-header-controls > .im3rx-ms .im3rx-ms-option::before,
+.im3rx-app[data-theme="night"] .im3rx-header-controls > .im3rx-ms .im3rx-ms-all::before{
+  background:#0B1622!important;
+  border-color:var(--im3rx-gold)!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-header-controls > .im3rx-ms .im3rx-ms-option.selected::before,
+.im3rx-app[data-theme="night"] .im3rx-header-controls > .im3rx-ms .im3rx-ms-all.selected::before{
+  background:var(--im3rx-gold)!important;
+  border-color:var(--im3rx-gold)!important;
+}
+
+@media (max-width:760px){
+  .im3rx-header-controls > .im3rx-ms .im3rx-ms-menu{
+    padding:8px!important;
+  }
+
+  .im3rx-header-controls > .im3rx-ms .im3rx-ms-option,
+  .im3rx-header-controls > .im3rx-ms .im3rx-ms-all{
+    min-height:36px!important;
+    padding:7px 8px!important;
+    gap:10px!important;
+  }
+
+  .im3rx-header-controls > .im3rx-ms .im3rx-ms-options-scroll{
+    gap:3px!important;
+  }
+}
+/* --- end IM3 v27.0 clean checkbox restoration --- */
