@@ -7002,3 +7002,102 @@ body{
 }
 
 /* --- end IM3 loading + MacBook 13 responsive refinement v22.0 --- */
+
+/* ============================================================
+   IM3 sidebar active selection visibility v23.0
+   Purpose: keep the Active selection card visible higher on
+   MacBook 13" and other low-height desktop/tablet screens.
+   ============================================================ */
+@media (min-width:761px){
+  .im3rx-sidebar{
+    display:flex!important;
+    flex-direction:column!important;
+    min-height:0!important;
+  }
+
+  .im3rx-brand-row,
+  .im3rx-nav,
+  .im3rx-sidebar-card{
+    flex:0 0 auto!important;
+  }
+
+  .im3rx-nav{
+    margin-bottom:0!important;
+  }
+
+  .im3rx-sidebar-card{
+    margin-top:clamp(10px,1.4vh,18px)!important;
+    margin-bottom:0!important;
+  }
+}
+
+/* MacBook 13 / limited height: compact sidebar without pushing
+   the Active selection card to the bottom edge. */
+@media (min-width:1025px) and (max-width:1440px), (min-width:1025px) and (max-height:860px){
+  .im3rx-sidebar{
+    justify-content:flex-start!important;
+    gap:8px!important;
+    padding-top:12px!important;
+    padding-bottom:12px!important;
+  }
+
+  .im3rx-brand-row{
+    gap:7px!important;
+    padding-bottom:7px!important;
+    margin-bottom:0!important;
+  }
+
+  .im3rx-nav{
+    gap:5px!important;
+  }
+
+  .im3rx-sidebar-card{
+    margin-top:8px!important;
+    padding:10px 11px!important;
+    border-radius:6px!important;
+    align-self:stretch!important;
+  }
+
+  .im3rx-sidebar-card span,
+  .im3rx-sidebar-card small{
+    font-size:10.5px!important;
+    line-height:1.25!important;
+  }
+
+  .im3rx-sidebar-card strong{
+    margin:4px 0!important;
+    font-size:13.5px!important;
+    line-height:1.18!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
+
+/* Very short browser windows: allow the nav to compress/scroll,
+   keeping the card reachable above the lower edge. */
+@media (min-width:761px) and (max-height:720px){
+  .im3rx-sidebar{
+    overflow-y:auto!important;
+  }
+
+  .im3rx-brand-row{
+    gap:6px!important;
+  }
+
+  .im3rx-nav{
+    gap:4px!important;
+  }
+
+  .im3rx-nav button{
+    height:34px!important;
+    min-height:34px!important;
+    font-size:12px!important;
+  }
+
+  .im3rx-sidebar-card{
+    margin-top:7px!important;
+    padding:9px 10px!important;
+  }
+}
+/* --- end IM3 sidebar active selection visibility v23.0 --- */
