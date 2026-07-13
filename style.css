@@ -7101,3 +7101,442 @@ body{
   }
 }
 /* --- end IM3 sidebar active selection visibility v23.0 --- */
+
+/* ============================================================
+   IM3 uniform fields and cross-device form polish v24.0
+   Purpose: make all fillable fields, dropdown triggers and
+   action buttons use the same sizing/spacing across browsers,
+   including Safari iOS/iPadOS, Chrome Android and MacBook 13".
+   ============================================================ */
+#im3-react-root{
+  --im3rx-control-h:46px;
+  --im3rx-control-h-compact:42px;
+  --im3rx-control-radius:6px;
+  --im3rx-control-pad-x:13px;
+  --im3rx-control-gap:9px;
+  --im3rx-control-font:14px;
+  --im3rx-label-h:34px;
+}
+
+#im3-react-root,
+#im3-react-root *{
+  box-sizing:border-box;
+}
+
+/* Normalize native browser rendering, especially Safari/iOS. */
+#im3-react-root input,
+#im3-react-root select,
+#im3-react-root textarea,
+#im3-react-root button{
+  -webkit-appearance:none;
+  appearance:none;
+  font-family:'PT Sans',Arial,sans-serif!important;
+  font-size:var(--im3rx-control-font)!important;
+  line-height:1.25!important;
+  box-sizing:border-box!important;
+  max-width:100%!important;
+}
+
+#im3-react-root input,
+#im3-react-root select,
+#im3-react-root textarea{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+
+/* One standard control size for the full platform. */
+.im3rx-header select,
+.im3rx-card select,
+.im3rx-field input,
+.im3rx-field select,
+.im3rx-report-options input[type="text"],
+.im3rx-report-options input:not([type]),
+.im3rx-report-options select,
+.im3rx-ms > .im3rx-ms-trigger,
+.im3rx-selectdd > .im3rx-ms-trigger,
+.im3rx-card button,
+.im3rx-header button,
+.im3rx-actions button,
+.im3rx-picker button,
+.im3rx-links a{
+  min-height:var(--im3rx-control-h)!important;
+  height:var(--im3rx-control-h)!important;
+  border-radius:var(--im3rx-control-radius)!important;
+  padding-top:0!important;
+  padding-bottom:0!important;
+  padding-left:var(--im3rx-control-pad-x)!important;
+  padding-right:var(--im3rx-control-pad-x)!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:var(--im3rx-control-gap)!important;
+  vertical-align:middle!important;
+}
+
+/* Text fields should align left, buttons should remain visually centered. */
+.im3rx-field input,
+.im3rx-field select,
+.im3rx-report-options input[type="text"],
+.im3rx-report-options input:not([type]),
+.im3rx-report-options select,
+.im3rx-header select,
+.im3rx-card select,
+.im3rx-ms > .im3rx-ms-trigger{
+  justify-content:flex-start!important;
+  text-align:left!important;
+}
+
+.im3rx-ms > .im3rx-ms-trigger{
+  width:100%!important;
+  min-width:0!important;
+  position:relative!important;
+  padding-right:42px!important;
+}
+
+.im3rx-ms > .im3rx-ms-trigger strong,
+.im3rx-ms > .im3rx-ms-trigger span{
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  text-align:left!important;
+}
+
+/* Keep chevron area stable; enough text-to-arrow spacing without oversized buttons. */
+.im3rx-ms > .im3rx-ms-trigger::after{
+  right:15px!important;
+  width:9px!important;
+  height:9px!important;
+  flex:0 0 auto!important;
+}
+
+.im3rx-header-controls .im3rx-ms > .im3rx-ms-trigger{
+  height:44px!important;
+  min-height:44px!important;
+  padding-right:44px!important;
+}
+
+.im3rx-header-controls .im3rx-ms > .im3rx-ms-trigger::after{
+  right:16px!important;
+}
+
+/* Labels get the same readable footprint, preventing uneven form rows. */
+.im3rx-field-label,
+.im3rx-field > span,
+.im3rx-graph-grid > label > span,
+.im3rx-report-options label > span,
+.im3rx-ms > span,
+.im3rx-header label > span{
+  min-height:var(--im3rx-label-h)!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  gap:7px!important;
+  line-height:1.25!important;
+}
+
+.im3rx-field-label > span,
+.im3rx-field > span,
+.im3rx-graph-grid > label > span,
+.im3rx-report-options label > span,
+.im3rx-ms > span,
+.im3rx-header label > span{
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+.im3rx-field-label > span{
+  display:-webkit-box!important;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  white-space:normal!important;
+}
+
+/* Grid consistency: equal columns, equal controls, no hidden overflow. */
+.im3rx-form-grid,
+.im3rx-graph-grid,
+.im3rx-report-options,
+.im3rx-header-controls,
+.im3rx-actions,
+.im3rx-card-head,
+.im3rx-report-layout,
+.im3rx-dual-charts,
+.im3rx-two-col{
+  min-width:0!important;
+  max-width:100%!important;
+}
+
+.im3rx-form-grid > *,
+.im3rx-graph-grid > *,
+.im3rx-report-options > *,
+.im3rx-header-controls > *,
+.im3rx-actions > *{
+  min-width:0!important;
+  max-width:100%!important;
+}
+
+.im3rx-form-grid{
+  align-items:start!important;
+  grid-auto-rows:minmax(86px,auto)!important;
+}
+
+.im3rx-field,
+.im3rx-ms,
+.im3rx-selectdd,
+.im3rx-report-options label{
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+}
+
+/* Dropdown curtain alignment and containment. */
+.im3rx-ms-menu{
+  left:0!important;
+  right:auto!important;
+  width:min(100%, 420px)!important;
+  min-width:100%!important;
+  max-width:min(420px, calc(100vw - 28px))!important;
+  text-align:left!important;
+  overflow-x:hidden!important;
+  box-sizing:border-box!important;
+}
+
+.im3rx-card-head > .im3rx-ms .im3rx-ms-menu,
+.im3rx-graph-grid > .im3rx-ms .im3rx-ms-menu,
+.im3rx-report-options > .im3rx-ms .im3rx-ms-menu{
+  width:100%!important;
+  max-width:min(420px, calc(100vw - 28px))!important;
+}
+
+.im3rx-ms-menu-head,
+.im3rx-ms-option,
+.im3rx-single-option{
+  text-align:left!important;
+  justify-content:flex-start!important;
+}
+
+.im3rx-ms-option{
+  min-height:40px!important;
+  width:100%!important;
+  padding:8px 10px!important;
+}
+
+.im3rx-ms-options-scroll{
+  max-width:100%!important;
+  overflow-x:hidden!important;
+}
+
+.im3rx-ms-option span,
+.im3rx-ms-menu-head strong{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:normal!important;
+  word-break:normal!important;
+  overflow-wrap:anywhere!important;
+}
+
+/* Action buttons with icons: clean horizontal rhythm everywhere. */
+.im3rx-card button img,
+.im3rx-header button img,
+.im3rx-actions button img,
+.im3rx-icon-text img,
+.im3rx-icon-text .im3rx-refresh-glyph img,
+.im3rx-refresh-glyph img{
+  width:18px!important;
+  height:18px!important;
+  flex:0 0 18px!important;
+  display:block!important;
+  object-fit:contain!important;
+}
+
+.im3rx-card button,
+.im3rx-header button,
+.im3rx-actions button,
+.im3rx-icon-text,
+.im3rx-links a{
+  white-space:nowrap!important;
+  text-align:center!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+.im3rx-actions.bottom{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+
+.im3rx-actions.bottom button{
+  flex:0 1 auto!important;
+  min-width:150px!important;
+}
+
+/* Icon-only buttons remain square and do not inherit large text-button widths. */
+.im3rx-icon-btn,
+.im3rx-bell-btn,
+.im3rx-theme,
+.im3rx-clock-actions .im3rx-refresh-btn{
+  width:42px!important;
+  min-width:42px!important;
+  max-width:42px!important;
+  height:42px!important;
+  min-height:42px!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+}
+
+/* Report switch aligned with the same vertical system without becoming oversized. */
+.im3rx-report-options .im3rx-toggle{
+  min-height:var(--im3rx-control-h)!important;
+  height:auto!important;
+  padding:10px 12px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+}
+
+.im3rx-report-options .im3rx-toggle span{
+  min-height:0!important;
+  display:block!important;
+  overflow:visible!important;
+  white-space:normal!important;
+}
+
+.im3rx-report-options .im3rx-toggle input[type="checkbox"]{
+  flex:0 0 42px!important;
+}
+
+/* MacBook 13 / compact desktop: slightly tighter but still uniform. */
+@media (min-width:1025px) and (max-height:860px), (min-width:1025px) and (max-width:1440px){
+  #im3-react-root{
+    --im3rx-control-h:42px;
+    --im3rx-label-h:30px;
+    --im3rx-control-pad-x:11px;
+    --im3rx-control-font:13px;
+  }
+
+  .im3rx-form-grid{
+    grid-auto-rows:minmax(76px,auto)!important;
+    gap:10px!important;
+  }
+
+  .im3rx-card,
+  .im3rx-header{
+    padding:14px!important;
+  }
+
+  .im3rx-card-head{
+    margin-bottom:12px!important;
+  }
+}
+
+/* Tablet landscape/portrait: fields remain equal and inside viewport. */
+@media (min-width:761px) and (max-width:1180px){
+  #im3-react-root{
+    --im3rx-control-h:44px;
+    --im3rx-label-h:31px;
+    --im3rx-control-font:14px;
+  }
+
+  .im3rx-header-controls{
+    align-items:end!important;
+  }
+
+  .im3rx-form-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-auto-rows:minmax(80px,auto)!important;
+  }
+
+  .im3rx-actions.bottom button{
+    min-width:140px!important;
+    flex:1 1 160px!important;
+  }
+}
+
+/* Phones: one-column, full-width controls, no overflow. */
+@media (max-width:760px){
+  #im3-react-root{
+    --im3rx-control-h:46px;
+    --im3rx-label-h:28px;
+    --im3rx-control-font:16px; /* prevents iOS zoom */
+    --im3rx-control-pad-x:12px;
+  }
+
+  .im3rx-form-grid{
+    grid-template-columns:1fr!important;
+    grid-auto-rows:auto!important;
+    gap:11px!important;
+  }
+
+  .im3rx-field-label,
+  .im3rx-field > span,
+  .im3rx-graph-grid > label > span,
+  .im3rx-report-options label > span,
+  .im3rx-ms > span,
+  .im3rx-header label > span{
+    min-height:auto!important;
+    align-items:flex-start!important;
+  }
+
+  .im3rx-actions.bottom,
+  .im3rx-actions,
+  .im3rx-header-controls{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    width:100%!important;
+  }
+
+  .im3rx-actions.bottom button,
+  .im3rx-actions button,
+  .im3rx-header button,
+  .im3rx-card button,
+  .im3rx-links a{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    flex:1 1 100%!important;
+  }
+
+  .im3rx-ms-menu,
+  .im3rx-card-head > .im3rx-ms .im3rx-ms-menu,
+  .im3rx-graph-grid > .im3rx-ms .im3rx-ms-menu,
+  .im3rx-report-options > .im3rx-ms .im3rx-ms-menu{
+    position:relative!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    max-height:260px!important;
+    margin-top:7px!important;
+  }
+
+  .im3rx-field input,
+  .im3rx-field select,
+  .im3rx-ms > .im3rx-ms-trigger,
+  .im3rx-card button,
+  .im3rx-header button{
+    font-size:16px!important;
+  }
+}
+
+/* Very small phones: compact padding without reducing touch targets. */
+@media (max-width:420px){
+  .im3rx-main,
+  .im3rx-header,
+  .im3rx-card{
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+
+  .im3rx-ms > .im3rx-ms-trigger{
+    padding-left:10px!important;
+    padding-right:38px!important;
+  }
+
+  .im3rx-ms > .im3rx-ms-trigger::after{
+    right:13px!important;
+  }
+}
+/* --- end IM3 uniform fields and cross-device form polish v24.0 --- */
