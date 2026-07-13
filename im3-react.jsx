@@ -902,7 +902,7 @@ function AppShell({activePage,setActivePage,theme,setTheme,metadata,selectedProj
   const timeParts=im3xDateTime(now).split(",");
   return <div className="im3rx-shell"><aside className="im3rx-sidebar"><div className="im3rx-brand-row"><div className="im3rx-brand"><div className="im3rx-logo"><span>IM3</span></div><div><strong>IM3 Framework</strong><span>Investment Decision Platform</span></div></div><button className="im3rx-icon-btn im3rx-bell-btn" title="Notifications" onClick={()=>setActivityOpen(!activityOpen)}><img src={IM3_ACTION_ICONS.bell} alt=""/>{activityLog.length?<em>{activityLog.length}</em>:null}</button><div className="im3rx-clock im3rx-clock-actions"><button className="im3rx-icon-btn im3rx-theme" title={theme==="day"?"Night mode":"Day mode"} onClick={()=>setTheme(theme==="day"?"night":"day")}><img src={theme==="day"?IM3_ACTION_ICONS.moon:IM3_ACTION_ICONS.sun} alt=""/></button><div className="im3rx-clock-text"><strong>{timeParts.pop()||im3xDateTime(now)}</strong><span>{timeParts.join(",")||"Real time"}</span></div><button className="im3rx-icon-btn im3rx-refresh-btn" title="Refresh results" onClick={onRefresh}><span className="im3rx-refresh-glyph"><img src={IM3_ACTION_ICONS.refresh} alt=""/></span></button></div></div><nav className="im3rx-nav">{IM3_NAV.map(item=><button key={item.id} className={activePage===item.id?"active":""} onClick={()=>setActivePage(item.id)}><i><AnimatedIcon kind={item.kind} fallback={item.icon} mode="hover" size={24} forceFallback={true}/></i><span>{item.label}</span></button>)}</nav><div className="im3rx-sidebar-card"><span>Active selection</span><strong>{selectedProject.Project_Name||selectedProject.label||selectedProject.Project_ID||"All projects"}</strong><small>{metadata?.version||"Version unavailable"}</small></div></aside><main className="im3rx-main">{children}</main></div>
 }
-function Header({activePage,projects,selectedProjectIds,setSelectedProjectIds,scenarioOptions,selectedScenarioTypes,setSelectedScenarioTypes,lastLoadedAt,onRefresh}){const title=IM3_NAV.find(n=>n.id===activePage)?.label||"Overview";return <section className="im3rx-header"><div><p>Google Sheets + Apps Script Engine</p><h1>{title}</h1><span>Last data load: {im3xDateTime(lastLoadedAt)}</span></div><div className="im3rx-header-controls"><MultiSelectDropdown className="im3rx-top-filter im3rx-project-filter" label="Projects" options={projects} selected={selectedProjectIds} onChange={setSelectedProjectIds} valueKey="Project_ID" displayKey="Project_Name" allLabel="All projects"/><MultiSelectDropdown className="im3rx-top-filter im3rx-scenario-filter" label="Scenario type" options={scenarioOptions} selected={selectedScenarioTypes} onChange={setSelectedScenarioTypes} allLabel="All scenarios"/><button className="im3rx-icon-text im3rx-refresh-btn im3rx-header-reload" onClick={onRefresh}><span className="im3rx-refresh-glyph"><img src={IM3_ACTION_ICONS.refresh} alt=""/></span>Reload</button></div></section>}
+function Header({activePage,projects,selectedProjectIds,setSelectedProjectIds,scenarioOptions,selectedScenarioTypes,setSelectedScenarioTypes,lastLoadedAt,onRefresh}){const title=IM3_NAV.find(n=>n.id===activePage)?.label||"Overview";return <section className="im3rx-header"><div><p>Google Sheets + Apps Script Engine</p><h1>{title}</h1><span>Last data load: {im3xDateTime(lastLoadedAt)}</span></div><div className="im3rx-header-controls"><MultiSelectDropdown label="Projects" options={projects} selected={selectedProjectIds} onChange={setSelectedProjectIds} valueKey="Project_ID" displayKey="Project_Name" allLabel="All projects"/><MultiSelectDropdown label="Scenario type" options={scenarioOptions} selected={selectedScenarioTypes} onChange={setSelectedScenarioTypes} allLabel="All scenarios"/><button className="im3rx-icon-text im3rx-refresh-btn" onClick={onRefresh}><span className="im3rx-refresh-glyph"><img src={IM3_ACTION_ICONS.refresh} alt=""/></span>Reload</button></div></section>}
 
 function SingleSelectDropdown({label, value, onChange, options, valueKey, displayKey, placeholder="Select…", className=""}){
   const [open,setOpen]=useState(false);
@@ -944,7 +944,7 @@ function SingleSelectDropdown({label, value, onChange, options, valueKey, displa
   </div>
 }
 
-function MultiSelectDropdown({label,options,selected,onChange,valueKey,displayKey,allLabel,className=""}){
+function MultiSelectDropdown({label,options,selected,onChange,valueKey,displayKey,allLabel}){
   const [open,setOpen]=useState(false);
   const rootRef=useRef(null);
   const normalized=asArray(options).map((option,idx)=>{
@@ -974,7 +974,7 @@ function MultiSelectDropdown({label,options,selected,onChange,valueKey,displayKe
   function toggle(value){onChange(selected.includes(value)?selected.filter(v=>v!==value):[...selected,value]);}
   function clearAll(){onChange([]);}
 
-  return <div ref={rootRef} className={`im3rx-ms ${className} ${open?"open":""}`}>
+  return <div ref={rootRef} className={`im3rx-ms ${open?"open":""}`}>
     <span>{label}</span>
     <button className="im3rx-ms-trigger" type="button" aria-haspopup="listbox" aria-expanded={open} onClick={()=>setOpen(!open)}>
       <strong>{selectedLabels||allLabel}</strong>

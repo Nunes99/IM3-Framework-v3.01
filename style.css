@@ -7792,3 +7792,250 @@ body{
   }
 }
 /* --- end IM3 v25.0 top filters correction --- */
+
+
+/* ============================================================
+   IM3 v26.0 — Top dropdowns reverted to v19 behavior
+   Scope: only Projects and Scenario type in the header.
+   No new dropdown component, no duplicated top-filter classes.
+   ============================================================ */
+.im3rx-header,
+.im3rx-header-controls{
+  overflow:visible!important;
+}
+
+.im3rx-header-controls{
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:flex-end!important;
+  gap:10px!important;
+  flex-wrap:wrap!important;
+  min-width:0!important;
+  max-width:100%!important;
+  position:relative!important;
+  z-index:1200!important;
+}
+
+.im3rx-header-controls > .im3rx-ms{
+  position:relative!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:6px!important;
+  flex:0 1 220px!important;
+  width:220px!important;
+  min-width:220px!important;
+  max-width:240px!important;
+  text-align:left!important;
+}
+
+.im3rx-header-controls > .im3rx-ms > span{
+  display:block!important;
+  width:100%!important;
+  font-size:12px!important;
+  line-height:1.2!important;
+  color:var(--im3rx-muted)!important;
+  font-weight:900!important;
+  text-align:left!important;
+  margin:0!important;
+}
+
+.im3rx-header-controls > .im3rx-ms > button,
+.im3rx-header-controls > .im3rx-ms > .im3rx-ms-trigger{
+  position:relative!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  height:42px!important;
+  min-height:42px!important;
+  padding:6px 42px 6px 11px!important;
+  border:1px solid var(--im3rx-border)!important;
+  border-radius:4px!important;
+  background:var(--im3rx-surface)!important;
+  color:var(--im3rx-text)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:12px!important;
+  text-align:left!important;
+  line-height:1.1!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+}
+
+.im3rx-header-controls > .im3rx-ms > button strong,
+.im3rx-header-controls > .im3rx-ms > .im3rx-ms-trigger strong{
+  display:block!important;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:13px!important;
+  font-weight:900!important;
+  text-align:left!important;
+  margin:0!important;
+}
+
+.im3rx-header-controls > .im3rx-ms > button small,
+.im3rx-header-controls > .im3rx-ms > .im3rx-ms-trigger small{
+  display:none!important;
+}
+
+.im3rx-header-controls > .im3rx-ms > button::after,
+.im3rx-header-controls > .im3rx-ms > .im3rx-ms-trigger::after{
+  content:""!important;
+  position:absolute!important;
+  right:13px!important;
+  top:50%!important;
+  width:16px!important;
+  height:16px!important;
+  transform:translateY(-50%)!important;
+  pointer-events:none!important;
+  background-image:var(--im3rx-select-arrow-light)!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  background-size:16px 16px!important;
+  opacity:.92!important;
+  transition:transform .16s ease, opacity .16s ease!important;
+}
+
+.im3rx-app[data-theme="night"] .im3rx-header-controls > .im3rx-ms > button::after,
+.im3rx-app[data-theme="night"] .im3rx-header-controls > .im3rx-ms > .im3rx-ms-trigger::after{
+  background-image:var(--im3rx-select-arrow-dark)!important;
+}
+
+.im3rx-header-controls > .im3rx-ms.open > button::after,
+.im3rx-header-controls > .im3rx-ms.open > .im3rx-ms-trigger::after{
+  transform:translateY(-50%) rotate(180deg)!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-menu{
+  position:absolute!important;
+  z-index:99999!important;
+  top:calc(100% + 6px)!important;
+  left:0!important;
+  right:auto!important;
+  width:100%!important;
+  min-width:100%!important;
+  max-width:min(360px, calc(100vw - 32px))!important;
+  max-height:min(280px, 52vh)!important;
+  overflow:hidden!important;
+  padding:8px!important;
+  border:1px solid var(--im3rx-border)!important;
+  border-radius:6px!important;
+  background:var(--im3rx-surface)!important;
+  box-shadow:0 18px 40px rgba(0,0,0,.18)!important;
+  text-align:left!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-menu-head{
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:center!important;
+  gap:10px!important;
+  width:100%!important;
+  padding:0 2px 8px!important;
+  margin:0!important;
+  text-align:left!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-menu-head strong,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-menu-head em{
+  text-align:left!important;
+  white-space:nowrap!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-options-scroll{
+  display:grid!important;
+  gap:4px!important;
+  max-height:min(210px, 42vh)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding-right:2px!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:8px!important;
+  width:100%!important;
+  min-height:34px!important;
+  padding:8px!important;
+  border-radius:4px!important;
+  color:var(--im3rx-text)!important;
+  cursor:pointer!important;
+  text-align:left!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option span,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all span{
+  display:block!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  text-align:left!important;
+}
+
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-option:hover,
+.im3rx-header-controls > .im3rx-ms .im3rx-ms-all:hover{
+  background:var(--im3rx-surface-2)!important;
+}
+
+.im3rx-header-controls > .im3rx-refresh-btn,
+.im3rx-header-controls > .im3rx-header-reload{
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:96px!important;
+  max-width:140px!important;
+  height:42px!important;
+  min-height:42px!important;
+  align-self:flex-end!important;
+}
+
+@media (max-width:1180px){
+  .im3rx-header-controls{
+    justify-content:flex-start!important;
+  }
+}
+
+@media (max-width:760px){
+  .im3rx-header-controls{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    gap:10px!important;
+    width:100%!important;
+  }
+
+  .im3rx-header-controls > .im3rx-ms,
+  .im3rx-header-controls > .im3rx-refresh-btn,
+  .im3rx-header-controls > .im3rx-header-reload{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    flex:0 0 auto!important;
+  }
+
+  .im3rx-header-controls > .im3rx-ms .im3rx-ms-menu{
+    position:relative!important;
+    top:auto!important;
+    left:auto!important;
+    right:auto!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    max-height:none!important;
+    margin-top:8px!important;
+    box-shadow:0 12px 28px rgba(0,0,0,.14)!important;
+  }
+
+  .im3rx-header-controls > .im3rx-ms .im3rx-ms-options-scroll{
+    max-height:min(260px, 42svh)!important;
+  }
+}
+/* --- end IM3 v26.0 top dropdowns reverted to v19 behavior --- */
