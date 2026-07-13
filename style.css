@@ -6396,3 +6396,103 @@ body{
   -webkit-overflow-scrolling:touch!important;
 }
 /* --- end IM3 sidebar fixed scroll v20.0 --- */
+
+
+/* ============================================================
+   IM3 initial loading center v21.0
+   Keeps the first loading card exactly centered after the fixed
+   sidebar scroll rules. Post-boot app layout is unchanged.
+   ============================================================ */
+#im3-react-root > .im3rx-boot-screen{
+  width:100vw!important;
+  max-width:100vw!important;
+  min-height:100vh!important;
+  min-height:100svh!important;
+  min-height:100dvh!important;
+  height:100vh!important;
+  height:100svh!important;
+  height:100dvh!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:clamp(14px,3vw,28px)!important;
+  margin:0!important;
+  overflow:hidden!important;
+  background:var(--im3rx-bg,#F4F7FA);
+  box-sizing:border-box!important;
+}
+
+#im3-react-root > .im3rx-boot-screen > .im3rx-loading:not(.compact),
+#im3-react-root > .im3rx-boot-screen > .im3rx-setup-error{
+  width:min(460px,calc(100vw - 32px))!important;
+  max-width:460px!important;
+  min-height:230px!important;
+  max-height:calc(100dvh - 32px)!important;
+  margin:0!important;
+  align-self:center!important;
+  justify-self:center!important;
+  display:grid!important;
+  place-items:center!important;
+  text-align:center!important;
+  overflow:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+
+#im3-react-root > .im3rx-boot-screen > .im3rx-loading:not(.compact) .im3rx-process-icon{
+  margin:0 auto 10px!important;
+}
+
+#im3-react-root > .im3rx-boot-screen > .im3rx-loading:not(.compact) strong,
+#im3-react-root > .im3rx-boot-screen > .im3rx-loading:not(.compact) p,
+#im3-react-root > .im3rx-boot-screen > .im3rx-loading:not(.compact) small,
+#im3-react-root > .im3rx-boot-screen > .im3rx-loading:not(.compact) em{
+  text-align:center!important;
+  justify-self:center!important;
+}
+
+@media(max-width:760px){
+  #im3-react-root:has(> .im3rx-boot-screen){
+    display:grid!important;
+    place-items:center!important;
+    height:100dvh!important;
+    min-height:100dvh!important;
+    overflow:hidden!important;
+    padding:0!important;
+  }
+
+  #im3-react-root > .im3rx-boot-screen{
+    position:fixed!important;
+    inset:0!important;
+    width:100vw!important;
+    height:100vh!important;
+    height:100svh!important;
+    height:100dvh!important;
+    min-height:100vh!important;
+    min-height:100svh!important;
+    min-height:100dvh!important;
+    padding:16px!important;
+    display:grid!important;
+    place-items:center!important;
+    overflow:hidden!important;
+  }
+
+  #im3-react-root > .im3rx-boot-screen > .im3rx-loading:not(.compact),
+  #im3-react-root > .im3rx-boot-screen > .im3rx-setup-error{
+    width:min(430px,calc(100vw - 28px))!important;
+    min-height:220px!important;
+    max-height:calc(100dvh - 28px)!important;
+    padding:24px 18px!important;
+    place-self:center!important;
+  }
+}
+
+@media(max-width:380px){
+  #im3-react-root > .im3rx-boot-screen{
+    padding:12px!important;
+  }
+  #im3-react-root > .im3rx-boot-screen > .im3rx-loading:not(.compact),
+  #im3-react-root > .im3rx-boot-screen > .im3rx-setup-error{
+    width:calc(100vw - 24px)!important;
+    min-height:210px!important;
+  }
+}
+/* --- end IM3 initial loading center v21.0 --- */
